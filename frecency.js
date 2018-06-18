@@ -1,129 +1,90 @@
-var weights = [
-  100,
-  2000,
-  75,
-  25,
-  70,
-  1400,
-  52.5,
-  17.5,
-  50,
-  1000,
-  37.5,
-  12.5,
-  30,
-  600,
-  22.5,
-  7.5,
-  10,
-  200,
-  7.5,
-  2.5
-]
-
 function computeFrecency(id) {
-  frequency = getFrequency(id)
-
-  if (frequency == 0) {
-  	return 140
-  }
-
-  let db = PlacesUtils.history.DBConnection;
-  let stmt = db.createStatement(`
-  	SELECT visit_type, visit_date
-  	FROM moz_places, moz_historyvisits
-  	WHERE moz_places.id = moz_historyvisits.place_id AND moz_places.id = :id
-  	ORDER BY moz_historyvisits.visit_date DESC
-  	LIMIT 10
-  `)
-  stmt.bindByName("id", id)
-
-  score = 0
-
-  while(stmt.executeStep()) {
-  	type = getTypeBucket(stmt.row.visit_type)
-  	recency = getRecencyBucket(stmt.row.visit_date)
-
-	if (type == -1) {
-	  continue
-	}
-
-  	bucket = type + 4 * recency // 4 type buckets
-
-  	score += weights[bucket]
-  	console.log(type, recency, "adding", weights[bucket])
-  }
-
-  return score * frequency / Math.min(frequency, 10)
-}
-
-function getFrequency(id) {
-  let db = PlacesUtils.history.DBConnection;
-  let stmt = db.createStatement("SELECT COUNT(*) AS frequency FROM moz_historyvisits WHERE place_id = :id")
+  let db = PlacesUtils.history.DBConnection
+  let stmt = db.createStatement("SELECT CALCULATE_FRECENCY(:id, 1) AS frecency")
   stmt.bindByName("id", id)
   stmt.executeStep()
-  return stmt.row.frequency
+  return stmt.row.frecency
 }
 
-function getTypeBucket(visit_type) {
-  // https://www.forensicswiki.org/wiki/Mozilla_Firefox_3_History_File_Format
-  lookup = {
-  	1: 0, // TRANSITION_LINK
-  	2: 1, // TRANSITION_TYPED
-  	3: 2, // TRANSITION_BOOKMARK
-  	4: -1, // TRANSITION_EMBED
-  	5: 0, // TRANSITION_REDIRECT_PERMANENT
-  	6: 0, // TRANSITION_REDIRECT_TEMPORARY
-  	7: -1 // TRANSITION_DOWNLOAD
-  }
-
-  return lookup[visit_type]
+function updatePref(prefName, prefValue) {
+  Services.prefs.setIntPref(prefName, prefValue)
 }
 
-function getRecencyBucket(visit_date_milliseconds) {
-  /*
-   * Buckets:
-   * - <= 4 days ago
-   * - <= 14 days ago
-   * - <= 31 days ago
-   * - <= 90 days ago
-   * - otherwise
-   */
-  timestamp = visit_date_milliseconds / 1000
-  now = Date.now()
+prefs = [
+	"places.frecency.firstBucketWeight",
+	"places.frecency.secondBucketWeight",
+	"places.frecency.thirdBucketWeight",
+	"places.frecency.fourthBucketWeight",
+	"places.frecency.defaultBucketWeight",
+	"places.frecency.embedVisitBonus",
+	"places.frecency.framedLinkVisitBonus",
+	"places.frecency.linkVisitBonus",
+	"places.frecency.typedVisitBonus",
+	"places.frecency.bookmarkVisitBonus",
+	"places.frecency.downloadVisitBonus",
+	"places.frecency.permRedirectVisitBonus",
+	"places.frecency.tempRedirectVisitBonus",
+	"places.frecency.redirectSourceVisitBonus",
+	"places.frecency.defaultVisitBonus",
+	"places.frecency.unvisitedBookmarkBonus",
+	"places.frecency.unvisitedTypedBonus",
+	"places.frecency.reloadVisitBonus"
+]
 
-  diff = now - timestamp
-  one_day = 24 * 60 * 60 * 1000
-
-  buckets = [4, 14, 31, 90]
-  i = 0
-
-  for (num_days of buckets) {
-  	if (diff <= num_days * one_day) {
-  	  return i
-  	} else {
-  	  i += 1
-  	}
-  }
-
-  return i
+function calculateFrecencyById(id) {
+	let db = PlacesUtils.history.DBConnection
+	let stmt = db.createStatement("SELECT CALCULATE_FRECENCY(id) as frecency FROM moz_places WHERE id = :id")
+	stmt.bindByName("id", id)
+	stmt.executeStep()
+	return stmt.row.frecency
 }
 
-function updateAllFrecencies() {
+function svmLoss(ids, correct) {
+	let frecencies = ids.map(calculateFrecencyById)
+	let correctFrecency = frecencies[correct]
+
+	let loss = 0
+
+	for (frecency of frecencies) {
+		if (frecency > correctFrecency) {
+			// loss += Math.pow(frecency - correctFrecency), 2)
+			loss += frecency - correctFrecency
+		}
+	}
+
+	return loss
+}
+
+function computeUpdate(ids, correct) {
+	let eps = 1
+	let gradient = []
+
+	for (pref of prefs) {
+		let currentValue = Services.prefs.getIntPref(pref)
+
+		Services.prefs.setIntPref(pref, currentValue - eps) 
+		let loss1 = svmLoss(ids, correct)
+
+		Services.prefs.setIntPref(pref, currentValue + eps) 
+		let loss2 = svmLoss(ids, correct)
+
+		let finiteDifference = (loss1 - loss2) / (2 * eps)
+		gradient.push(finiteDifference)
+
+		Services.prefs.setIntPref(pref, currentValue) 
+	}
+
+	return gradient
+}
+
+computeUpdate([22, 23, 24, 25], 0)
+
+(function() {
   let db = PlacesUtils.history.DBConnection
-  let stmt = db.createStatement("SELECT id from moz_places")
-  var frecencies = []
-
-  while(stmt.executeStep()) {
-	frecencies.push([stmt.row.id, computeFrecency(stmt.row.id)])
-  }
-
-  for ([id, frecency] of frecencies) {
-  	let stmt = db.createStatement("UPDATE moz_places SET frecency = :frecency WHERE id = :id")
-  	stmt.bindByName("frecency", frecency)
-  	stmt.bindByName("id", id)
-  	stmt.executeStep()
-  }
-
-  return frecencies
-}
+  let stmt = db.createStatement(`SELECT *
+  FROM moz_historyvisits a, moz_historyvisits b
+  WHERE a.id = b.from_visit AND b.place_id = 12
+  `)
+  stmt.executeStep()
+  console.log(stmt.row)
+})();

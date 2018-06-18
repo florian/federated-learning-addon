@@ -52,14 +52,14 @@ function setFrecencyTrigger() {
 // setFrecencyTrigger()
 
 (function() {
-  let db = PlacesUtils.history.DBConnection;
+  let db = PlacesUtils.history.DBConnection
   let stmt = db.createStatement("SELECT compute_frecency(100) AS myValue")
   stmt.executeStep()
   console.log(stmt.row.myValue)
 })();
 
 (function() {
-  let db = PlacesUtils.history.DBConnection;
+  let db = PlacesUtils.history.DBConnection
   let stmt = db.createStatement("DROP TRIGGER frecency_trigger")
   stmt.executeStep()
 })();
