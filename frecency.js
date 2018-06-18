@@ -1,15 +1,3 @@
-function computeFrecency(id) {
-  let db = PlacesUtils.history.DBConnection
-  let stmt = db.createStatement("SELECT CALCULATE_FRECENCY(:id, 1) AS frecency")
-  stmt.bindByName("id", id)
-  stmt.executeStep()
-  return stmt.row.frecency
-}
-
-function updatePref(prefName, prefValue) {
-  Services.prefs.setIntPref(prefName, prefValue)
-}
-
 prefs = [
 	"places.frecency.firstBucketWeight",
 	"places.frecency.secondBucketWeight",
@@ -76,15 +64,3 @@ function computeUpdate(ids, correct) {
 
 	return gradient
 }
-
-computeUpdate([22, 23, 24, 25], 0)
-
-(function() {
-  let db = PlacesUtils.history.DBConnection
-  let stmt = db.createStatement(`SELECT *
-  FROM moz_historyvisits a, moz_historyvisits b
-  WHERE a.id = b.from_visit AND b.place_id = 12
-  `)
-  stmt.executeStep()
-  console.log(stmt.row)
-})();
