@@ -1,4 +1,4 @@
-let prefs = [
+let PREFS = [
 	"places.frecency.firstBucketWeight",
 	"places.frecency.secondBucketWeight",
 	"places.frecency.thirdBucketWeight",
@@ -19,7 +19,7 @@ let prefs = [
 	"places.frecency.reloadVisitBonus"
 ]
 
-let defaultPrefValues = [
+let DEFAULT_PREF_VALUES = [
 	100,
 	70,
 	50,
@@ -48,7 +48,6 @@ function svmLoss(urls, correct) {
 
 	for (frecency of frecencies) {
 		if (frecency > correctFrecency) {
-			// loss += Math.pow(frecency - correctFrecency), 2)
 			loss += frecency - correctFrecency
 		}
 	}
@@ -57,10 +56,8 @@ function svmLoss(urls, correct) {
 }
 
 class FrecencyOptimizer {
-	constructor (lossFn, prefs, defaultPrefValues, eps = 1) {
+	constructor (lossFn, eps = 1) {
 		this.lossFn = lossFn
-		this.prefs = prefs
-		this.defaultPrefValues = defaultPrefValues
 		this.eps = eps
 	}
 
@@ -74,7 +71,7 @@ class FrecencyOptimizer {
 	computeGradient (urls, selected_index) {
 		let gradient = []
 
-		for (let pref of this.prefs) {
+		for (let pref of PREFS) {
 			let currentValue = Services.prefs.getIntPref(pref)
 
 			Services.prefs.setIntPref(pref, currentValue - this.eps) 
@@ -93,10 +90,8 @@ class FrecencyOptimizer {
 	}
 	
 	reset() {
-		for(let i = 0; i < this.prefs.length; i++) {
-			Services.prefs.setIntPref(this.prefs[i], this.defaultPrefValues[i])
+		for(let i = 0; i < PREFS.length; i++) {
+			Services.prefs.setIntPref(PREFS[i], DEFAULT_PREF_VALUES[i])
 		}
 	}
 }
-
-let optimizer = new FrecencyOptimizer(svmLoss, prefs, defaultPrefValues)

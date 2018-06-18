@@ -2,8 +2,9 @@ EVENT = "autocomplete-will-enter-text"
 NON_HISTORY_STYLES = ["switchtab", "remotetab", "searchengine", "visiturl", "extension", "suggestion", "keyword"] // bookmark
 
 class HistorySearchController {
-	constructor () {
+	constructor (optimizer) {
 		this.bindEvents()
+		this.optimizer = optimizer
 	}
 
 	bindEvents () {
@@ -33,7 +34,7 @@ class HistorySearchController {
 
 			let selectedHistoryIndex = historySuggestions.indexOf(controller.getFinalCompleteValueAt(selectedIndex))
 
-			optimizer.step(historySuggestions, selectedHistoryIndex)
+			this.optimizer.step(historySuggestions, selectedHistoryIndex)
 
 			console.log("The user selected the", selectedHistoryIndex , "th history entry")
 
@@ -52,5 +53,3 @@ class HistorySearchController {
 	}
 
 }
-
-let controller = new HistorySearchController()
