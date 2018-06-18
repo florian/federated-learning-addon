@@ -1,0 +1,20 @@
+{
+  "name": "federated-learning-addon",
+  "devDependencies": {
+    "standard": "^11.0.1"
+  },
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/florian/federated-learning-addon.git"
+  },
+  "bugs": {
+    "url": "https://github.com/florian/federated-learning-addon/issues"
+  },
+  "homepage": "https://github.com/florian/federated-learning-addon#readme",
+  "standard": {
+    "globals": ["Services", "Cu", "Ci", "PlacesUtils"]
+  }
+}
