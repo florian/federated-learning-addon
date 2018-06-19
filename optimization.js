@@ -56,16 +56,15 @@ function svmLoss (urls, correct) {
 }
 
 class FrecencyOptimizer {
-  constructor (lossFn, eps = 1) {
+  constructor (synchronizer, lossFn, eps = 1) {
+    this.synchronizer = synchronizer
     this.lossFn = lossFn
     this.eps = eps
   }
 
   step (urls, selectedIndex) {
     let gradient = this.computeGradient(urls, selectedIndex)
-    console.log(gradient)
-
-    // Step in Telemetry
+    this.synchronizer.applyModelUpdate(gradient)
   }
 
   computeGradient (urls, selectedIndex) {
