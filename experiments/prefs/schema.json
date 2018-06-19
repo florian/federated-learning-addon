@@ -1,0 +1,36 @@
+[
+  {
+    "namespace": "prefs",
+    "description": "Pref get, set, watch, unwatch(?)",
+    "functions": [
+      {
+        "name": "getIntPref",
+        "type": "function",
+        "description": "Returns the value of a pref",
+        "async": true,
+        "parameters": [
+          {
+            "name": "prefName",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "setIntPref",
+        "type": "function",
+        "description": "Sets the value of a pref",
+        "async": true,
+        "parameters": [
+          {
+            "name": "prefName",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "any"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -4,6 +4,11 @@
 
 This is the first draft of the Firefox addon that implements the client-side part of a federated learning system.
 
+## Installing the addon
+
+1. Go to `about:config` and set `extensions.legacy.enabled` to `true`
+2. Go to `about:debugging`, click *Load Temporary Add-on* and select `manifest.json`
+
 ## Components
 
 - `sql.js`: For interacting with the `moz_places` table and recalculating / changing frecency scores

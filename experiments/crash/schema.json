@@ -1,0 +1,15 @@
+[
+  {
+    "namespace": "experiments.crash",
+    "description": "Crash",
+    "functions": [
+      {
+        "name": "abort",
+        "type": "function",
+        "description": "Calls the abort() function",
+        "parameters": [],
+        "async": true
+      }
+    ]
+  }
+]

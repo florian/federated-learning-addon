@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+  "name": "Federated Learning Awesome Bar",
+  "description": "Improve history and bookmark search",
+  "version": "1.0",
+
+  "applications": {
+    "gecko": {
+      "id": "fhartmann@mozilla.org"
+    }
+  },
+
+  "background": {
+    "scripts": ["main.js"]
+  },
+
+  "experiment_apis": {
+    "crash": {
+      "schema": "experiments/crash/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "script": "experiments/crash/api.js",
+        "paths": [["experiments", "crash"]]
+      }
+    },
+    "prefs": {
+      "schema": "experiments/prefs/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "script": "experiments/prefs/api.js",
+        "paths": [["experiments", "prefs"]]
+      }
+    }
+  }
+
+}
