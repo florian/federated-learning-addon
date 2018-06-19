@@ -1,4 +1,4 @@
-Cu.import('resource://gre/modules/PlacesUtils.jsm')
+ChromeUtils.import('resource://gre/modules/PlacesUtils.jsm')
 
 function calculateFrecencyByURL (url) {
   let db = PlacesUtils.history.DBConnection
