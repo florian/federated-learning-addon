@@ -8,8 +8,10 @@ ChromeUtils.import("resource://gre/modules/Services.jsm");
 var prefs = class extends ExtensionAPI {
   getAPI(context) {
     return {
-      // eslint-disable-next-line no-undef
-      prefs: Services.prefs,
+      experiments: {
+        // eslint-disable-next-line no-undef
+        prefs: Services.prefs,
+      }
     };
   }
 };

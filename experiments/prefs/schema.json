@@ -1,6 +1,6 @@
 [
   {
-    "namespace": "prefs",
+    "namespace": "experiments.prefs",
     "description": "Pref get, set, watch, unwatch(?)",
     "functions": [
       {
