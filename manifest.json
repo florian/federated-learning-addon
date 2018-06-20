@@ -30,6 +30,14 @@
         "script": "experiments/frecency/api.js",
         "paths": [["experiments", "frecency"]]
       }
+    },
+    "awesomeBar": {
+      "schema": "experiments/awesomeBar/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "script": "experiments/awesomeBar/api.js",
+        "paths": [["experiments", "awesomeBar"]]
+      }
     }
   }
 }

@@ -1,0 +1,28 @@
+[
+  {
+    "namespace": "experiments.awesomeBar",
+    "description": "Listen to history searches in the awesome bar",
+    "functions": [
+      {
+        "name": "addObserver",
+        "type": "function",
+        "description": "Add a Services observer",
+        "async": true,
+        "parameters": [
+          {
+            "name": "callback",
+            "type": "function"
+          },
+          {
+            "name": "topic",
+            "type": "string"
+          },
+          {
+            "name": "ownsWeak",
+            "type": "boolean"
+          }
+        ]
+      }
+    ]
+  }
+]
