@@ -1,0 +1,27 @@
+[
+  {
+    "namespace": "experiments.frecency",
+    "description": "Pref get, set, watch, unwatch(?)",
+    "functions": [
+      {
+        "name": "calculateByURL",
+        "type": "function",
+        "description": "Recomputes the frecency score for the given URL and returns it",
+        "async": true,
+        "parameters": [
+          {
+            "name": "URL",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "updateAllFrecencies",
+        "type": "function",
+        "description": "Updates all frecency scores in moz_places",
+        "async": true,
+        "parameters": []
+      }
+    ]
+  }
+]

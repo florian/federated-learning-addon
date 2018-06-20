@@ -15,14 +15,6 @@
   },
 
   "experiment_apis": {
-    "crash": {
-      "schema": "experiments/crash/schema.json",
-      "parent": {
-        "scopes": ["addon_parent"],
-        "script": "experiments/crash/api.js",
-        "paths": [["experiments", "crash"]]
-      }
-    },
     "prefs": {
       "schema": "experiments/prefs/schema.json",
       "parent": {
@@ -30,7 +22,14 @@
         "script": "experiments/prefs/api.js",
         "paths": [["experiments", "prefs"]]
       }
+    },
+    "frecency": {
+      "schema": "experiments/frecency/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "script": "experiments/frecency/api.js",
+        "paths": [["experiments", "frecency"]]
+      }
     }
   }
-
 }
