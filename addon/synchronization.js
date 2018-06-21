@@ -1,5 +1,3 @@
-ChromeUtils.import('resource://gre/modules/TelemetryController.jsm')
-
 URL_ENDPOINT = 'https://s3-us-west-2.amazonaws.com/telemetry-test-bucket/frecency/latest.json'
 TIME_INTERVAL = 1 * 60 * 1000
 // TIME_INTERVAL = 30 * 60 * 1000
@@ -33,7 +31,7 @@ class ModelSynchronization {
     this.iteration = iteration
 
     for (let i = 0; i < PREFS.length; i++) {
-      Services.prefs.setIntPref(PREFS[i], model[i])
+      browser.experiments.prefs.setIntPref(PREFS[i], model[i])
     }
   }
 
@@ -47,6 +45,8 @@ class ModelSynchronization {
       addClientId: true
     }
 
-    TelemetryController.submitExternalPing(TELEMETRY_TOPIC, payload, options)
+    console.log(payload)
+
+    //TelemetryController.submitExternalPing(TELEMETRY_TOPIC, payload, options)
   }
 }

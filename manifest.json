@@ -10,8 +10,13 @@
     }
   },
 
+  "permissions": [
+    "webRequest",
+    "<all_urls>"
+  ],
+
   "background": {
-    "scripts": ["main.js"]
+    "scripts": ["addon/prefs.js", "addon/synchronization.js", "addon/optimization.js", "addon/main.js"]
   },
 
   "experiment_apis": {

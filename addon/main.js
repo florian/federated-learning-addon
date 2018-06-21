@@ -1,3 +1,7 @@
-let synchronizer = new ModelSynchronization()
-let optimizer = new FrecencyOptimizer(synchronizer, svmLoss)
-let controller = new HistorySearchController(optimizer)
+console.log("Addon starting")
+
+const synchronizer = new ModelSynchronization()
+const optimizer = new FrecencyOptimizer(synchronizer, svmLoss)
+
+browser.experiments.awesomeBar.onHistorySearch.addListener(optimizer.step.bind(optimizer))
+//let controller = new HistorySearchController(optimizer)
