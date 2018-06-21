@@ -9,7 +9,14 @@
         "description": "Fires when a history search is performed in the awesome bar",
         "parameters": [
           {
-            "name": "x",
+            "name": "historySuggestions",
+            "type": "array",
+            "items": {
+                  "type": "number"
+            }
+          },
+          {
+            "name": "selectedHistoryIndex",
             "type": "number"
           }
         ]
