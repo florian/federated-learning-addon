@@ -1,9 +1,9 @@
-URL_ENDPOINT = 'https://s3-us-west-2.amazonaws.com/telemetry-test-bucket/frecency/latest.json'
-TIME_INTERVAL = 1 * 60 * 1000
+const URL_ENDPOINT = 'https://s3-us-west-2.amazonaws.com/telemetry-test-bucket/frecency/latest.json'
+const TIME_INTERVAL = 1 * 60 * 1000
 // TIME_INTERVAL = 30 * 60 * 1000
-EXTRA_DELAY = 5 * 1000
+const EXTRA_DELAY = 5 * 1000
 // EXTRA_DELAY = 30 * 1000
-TELEMETRY_TOPIC = 'frecency_update'
+const TELEMETRY_TOPIC = 'frecency_update'
 
 class ModelSynchronization {
   constructor () {
@@ -47,6 +47,6 @@ class ModelSynchronization {
 
     console.log(payload)
 
-    //TelemetryController.submitExternalPing(TELEMETRY_TOPIC, payload, options)
+    // TelemetryController.submitExternalPing(TELEMETRY_TOPIC, payload, options)
   }
 }

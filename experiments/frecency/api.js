@@ -1,4 +1,4 @@
-"use strict";
+'use strict'
 
 /* global Components, ExtensionAPI */
 
@@ -6,7 +6,7 @@ ChromeUtils.import('resource://gre/modules/PlacesUtils.jsm')
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "crash" }] */
 var frecency = class extends ExtensionAPI {
-  getAPI() {
+  getAPI () {
     return {
       experiments: {
         frecency: {
@@ -23,8 +23,8 @@ var frecency = class extends ExtensionAPI {
             let stmt = db.createStatement('UPDATE moz_places SET frecency = CALCULATE_FRECENCY(id)')
             stmt.executeStep()
           }
-        },
-      },
-    };
+        }
+      }
+    }
   }
-};
+}

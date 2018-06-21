@@ -39,4 +39,3 @@ const DEFAULT_PREF_VALUES = [
   200,
   0
 ]
-

@@ -1,27 +1,27 @@
-"use strict";
+'use strict'
 
 /* global ExtensionAPI */
 
-ChromeUtils.import("resource://gre/modules/Services.jsm");
+ChromeUtils.import('resource://gre/modules/Services.jsm')
 
-const { ExtensionCommon  } = ChromeUtils.import(
-   "resource://gre/modules/ExtensionCommon.jsm",
-);
+const { ExtensionCommon } = ChromeUtils.import(
+  'resource://gre/modules/ExtensionCommon.jsm'
+)
 
-const { EventManager  } = ExtensionCommon;
+const { EventManager } = ExtensionCommon
 
 const EVENT = 'autocomplete-will-enter-text'
 const NON_HISTORY_STYLES = ['switchtab', 'remotetab', 'searchengine', 'visiturl', 'extension', 'suggestion', 'keyword'] // bookmark
 
 var awesomeBar = class extends ExtensionAPI {
-  getAPI(context) {
+  getAPI (context) {
     return {
       experiments: {
         // eslint-disable-next-line no-undef
         awesomeBar: {
           onHistorySearch: new EventManager({
             context,
-            name: "awesomeBar.onHistorySearch",
+            name: 'awesomeBar.onHistorySearch',
             register: fire => {
               Services.obs.addObserver(el => processAwesomeBarSearch(el, fire.async), 'autocomplete-will-enter-text', false)
             }
@@ -32,7 +32,7 @@ var awesomeBar = class extends ExtensionAPI {
   }
 }
 
-function processAwesomeBarSearch(el, callback) {
+function processAwesomeBarSearch (el, callback) {
   let popup = el.popup
   let controller = popup.view.QueryInterface(Ci.nsIAutoCompleteController)
 
@@ -58,7 +58,7 @@ function processAwesomeBarSearch(el, callback) {
   }
 }
 
-function isHistoryStyle(styleString) {
+function isHistoryStyle (styleString) {
   let styles = new Set(styleString.split(/\s+/))
   let isNonHistoryStyle = NON_HISTORY_STYLES.some(s => styles.has(s))
   return !isNonHistoryStyle
