@@ -11,12 +11,17 @@ This is the first draft of the Firefox addon that implements the client-side par
 
 ## Components
 
-- `sql.js`: For interacting with the `moz_places` table and recalculating / changing frecency scores
-- `synchronization.js`: Everything related to the federated learning protocol. Currently that means sending weight updates back using Telemetry and reading the current model from S3
-- `optimization.js`: For computing model updates
-- `ui-controller.js`: Observes what the user is doing in the awesome bar and retrieves the required information for history / bookmark searches (number of typed characters, selected suggestion, features of other suggestions)
+### Experiment APIs
 
-`main.js` connects everything.
+- `frecency`: For interacting with the `moz_places` table and recalculating / changing frecency scores
+- `awesomeBar`: For observing interactions with the awesome bar. The required information for history / bookmark searches is retrieved (number of typed characters, selected suggestion, features of other suggestions)
+- `prefs`: For reading and writing preferences. This is just used to update the weights
+
+### Core components
+
+- `synchronization`: Everything related to the federated learning protocol. Currently that means sending weight updates back using Telemetry and reading the current model from S3
+- `optimization`: For computing model updates
+- `main.js` connects everything.
 
 ## Other links
 
