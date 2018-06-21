@@ -2,24 +2,15 @@
   {
     "namespace": "experiments.awesomeBar",
     "description": "Listen to history searches in the awesome bar",
-    "functions": [
+    "events": [
       {
-        "name": "addObserver",
+        "name": "onHistorySearch",
         "type": "function",
-        "description": "Add a Services observer",
-        "async": true,
+        "description": "Fires when a history search is performed in the awesome bar",
         "parameters": [
           {
-            "name": "callback",
-            "type": "function"
-          },
-          {
-            "name": "topic",
-            "type": "string"
-          },
-          {
-            "name": "ownsWeak",
-            "type": "boolean"
+            "name": "x",
+            "type": "number"
           }
         ]
       }
