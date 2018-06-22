@@ -18,11 +18,13 @@ These updates are collected using Telemetry.
 - `frecency`: For interacting with the `moz_places` table and recalculating / changing frecency scores
 - `awesomeBar`: For observing interactions with the awesome bar. The required information for history / bookmark searches is retrieved (number of typed characters, selected suggestion, features of other suggestions)
 - `prefs`: For reading and writing preferences. This is just used to update the weights
+- `study` from [`shield-studies-addon-utils`](https://github.com/mozilla/shield-studies-addon-utils) for study related helpers
 
 ### Core components
 
 - `synchronization`: Everything related to the federated learning protocol. Currently that means sending weight updates back using Telemetry and reading the current model from S3
 - `optimization`: For computing model updates
+- `studySetup` is adapted from [`shield-studies-addon-utils`](https://github.com/mozilla/shield-studies-addon-utils) and configures the study
 - `main.js` connects everything.
 
 ## Other links
