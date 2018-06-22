@@ -1,0 +1,870 @@
+[
+  {
+    "namespace": "study",
+    "description": "Interface for Shield and Pioneer studies.",
+    "apiVersion": 5,
+    "types": [
+      {
+        "id": "NullableString",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "oneOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "choices": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "testcases": [
+          null,
+          "a string"
+        ]
+      },
+      {
+        "id": "NullableInteger",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "oneOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "integer"
+          }
+        ],
+        "choices": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "integer"
+          }
+        ],
+        "testcases": [
+          null,
+          1234567890
+        ],
+        "failcases": [
+          "1234567890",
+          []
+        ]
+      },
+      {
+        "id": "studyTypesEnum",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "string",
+        "enum": [
+          "shield",
+          "pioneer"
+        ],
+        "testcases": [
+          "shield",
+          "pioneer"
+        ],
+        "failcases": [
+          "foo"
+        ]
+      },
+      {
+        "id": "weightedVariationObject",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "name",
+          "weight"
+        ],
+        "testcase": {
+          "name": "feature-active",
+          "weight": 1.5
+        }
+      },
+      {
+        "id": "weightedVariationsArray",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "weight": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "name",
+            "weight"
+          ]
+        },
+        "testcase": [
+          {
+            "name": "feature-active",
+            "weight": 1.5
+          },
+          {
+            "name": "feature-inactive",
+            "weight": 1.5
+          }
+        ]
+      },
+      {
+        "id": "anEndingRequest",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "fullname": {
+            "$ref": "NullableString",
+            "optional": true
+          },
+          "category": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "ended-positive",
+                  "ended-neutral",
+                  "ended-negative"
+                ]
+              }
+            ],
+            "choices": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "ended-positive",
+                  "ended-neutral",
+                  "ended-negative"
+                ]
+              }
+            ],
+            "optional": true
+          },
+          "baseUrls": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "optional": true,
+            "default": []
+          },
+          "exacturls": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "choices": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "optional": "true\ndefault: []"
+          }
+        },
+        "additionalProperties": true,
+        "testcases": [
+          {
+            "baseUrls": [
+              "some.url"
+            ],
+            "fullname": "anEnding",
+            "category": "ended-positive"
+          },
+          {},
+          {
+            "baseUrls": [
+              "some.url"
+            ]
+          },
+          {
+            "baseUrls": [],
+            "fullname": null,
+            "category": null
+          }
+        ],
+        "failcases": [
+          {
+            "baseUrls": null,
+            "category": "not okay"
+          }
+        ]
+      },
+      {
+        "id": "onEndStudyResponse",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "fields": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "urls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "id": "studyInfoObject",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "variation": {
+            "$ref": "weightedVariationObject"
+          },
+          "firstRunTimestamp": {
+            "type": "number"
+          },
+          "activeExperimentName": {
+            "type": "string"
+          },
+          "delayInMinutes": {
+            "type": "number"
+          },
+          "isFirstRun": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "variation",
+          "firstRunTimestamp",
+          "activeExperimentName",
+          "isFirstRun"
+        ]
+      },
+      {
+        "id": "studySetup",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "activeExperimentName": {
+            "type": "string"
+          },
+          "studyType": {
+            "$ref": "studyTypesEnum"
+          },
+          "expire": {
+            "type": "object",
+            "properties": {
+              "days": {
+                "type": "integer"
+              }
+            },
+            "optional": true,
+            "additionalProperties": false
+          },
+          "endings": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "anEndingRequest"
+            }
+          },
+          "weightedVariations": {
+            "$ref": "weightedVariationsArray"
+          },
+          "telemetry": {
+            "type": "object",
+            "properties": {
+              "send": {
+                "type": "boolean"
+              },
+              "removeTestingFlag": {
+                "type": "boolean"
+              }
+            }
+          },
+          "testing": {
+            "type": "object",
+            "properties": {
+              "variationName": {
+                "$ref": "NullableString",
+                "optional": true
+              },
+              "firstRunTimestamp": {
+                "$ref": "NullableInteger",
+                "optional": true
+              },
+              "expired": {
+                "choices": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "optional": true
+              }
+            },
+            "additionalProperties": false,
+            "optional": true
+          }
+        },
+        "required": [
+          "activeExperimentName",
+          "studyType",
+          "endings",
+          "weightedVariations",
+          "telemetry"
+        ],
+        "additionalProperties": true,
+        "testcases": [
+          {
+            "activeExperimentName": "aStudy",
+            "studyType": "shield",
+            "expire": {
+              "days": 10
+            },
+            "endings": {
+              "anEnding": {
+                "baseUrls": [
+                  "some.url"
+                ]
+              }
+            },
+            "weightedVariations": [
+              {
+                "name": "feature-active",
+                "weight": 1.5
+              }
+            ],
+            "telemetry": {
+              "send": false,
+              "removeTestingFlag": false
+            }
+          },
+          {
+            "activeExperimentName": "aStudy",
+            "studyType": "shield",
+            "expire": {
+              "days": 10
+            },
+            "endings": {
+              "anEnding": {
+                "baseUrls": [
+                  "some.url"
+                ]
+              }
+            },
+            "weightedVariations": [
+              {
+                "name": "feature-active",
+                "weight": 1.5
+              }
+            ],
+            "telemetry": {
+              "send": false,
+              "removeTestingFlag": false
+            },
+            "testing": {
+              "variationName": "something",
+              "firstRunTimestamp": 1234567890,
+              "expired": true
+            }
+          },
+          {
+            "activeExperimentName": "aStudy",
+            "studyType": "pioneer",
+            "endings": {
+              "anEnding": {
+                "baseUrls": [
+                  "some.url"
+                ]
+              }
+            },
+            "weightedVariations": [
+              {
+                "name": "feature-active",
+                "weight": 1.5
+              }
+            ],
+            "telemetry": {
+              "send": false,
+              "removeTestingFlag": true
+            },
+            "testing": {
+              "variationName": "something",
+              "firstRunTimestamp": 1234567890,
+              "expired": true
+            }
+          },
+          {
+            "activeExperimentName": "shield-utils-test-addon@shield.mozilla.org",
+            "studyType": "shield",
+            "telemetry": {
+              "send": true,
+              "removeTestingFlag": false
+            },
+            "endings": {
+              "user-disable": {
+                "baseUrls": [
+                  "http://www.example.com/?reason=user-disable"
+                ]
+              },
+              "ineligible": {
+                "baseUrls": [
+                  "http://www.example.com/?reason=ineligible"
+                ]
+              },
+              "expired": {
+                "baseUrls": [
+                  "http://www.example.com/?reason=expired"
+                ]
+              },
+              "some-study-defined-ending": {
+                "category": "ended-neutral"
+              },
+              "some-study-defined-ending-with-survey-url": {
+                "baseUrls": [
+                  "http://www.example.com/?reason=some-study-defined-ending-with-survey-url"
+                ],
+                "category": "ended-negative"
+              }
+            },
+            "weightedVariations": [
+              {
+                "name": "feature-active",
+                "weight": 1.5
+              },
+              {
+                "name": "feature-passive",
+                "weight": 1.5
+              },
+              {
+                "name": "control",
+                "weight": 1
+              }
+            ],
+            "expire": {
+              "days": 14
+            },
+            "testing": {},
+            "allowEnroll": true
+          }
+        ]
+      },
+      {
+        "id": "telemetryPayload",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "additionalProperties": true,
+        "testcase": {
+          "foo": "bar"
+        }
+      },
+      {
+        "id": "searchTelemetryQuery",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "optional": true
+          },
+          "n": {
+            "type": "integer",
+            "optional": true
+          },
+          "minimumTimestamp": {
+            "type": "number",
+            "optional": true
+          },
+          "headersOnly": {
+            "type": "boolean",
+            "optional": true
+          }
+        },
+        "additionalProperties": false,
+        "testcase": {
+          "type": [
+            "shield-study-addon",
+            "shield-study"
+          ],
+          "n": 100,
+          "minimumTimestamp": 1523968204184,
+          "headersOnly": false
+        }
+      },
+      {
+        "id": "anEndingAnswer",
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "additionalProperties": true
+      }
+    ],
+    "functions": [
+      {
+        "name": "setup",
+        "type": "function",
+        "async": true,
+        "description": "Attempt an setup/enrollment, with these effects:\n\n- sets 'studyType' as Shield or Pioneer\n  - affects telemetry\n  - (5.1 TODO) watches for dataPermission changes that should *always*\n    stop that kind of study\n\n- Use or choose variation\n  - `testing.variation` if present\n  - OR (internal) deterministicVariation\n    from `weightedVariations`\n    based on hash of\n\n    - activeExperimentName\n    - clientId\n\n- During firstRun[1] only:\n  - set firstRunTimestamp pref value\n  - send 'enter' ping\n  - if `allowEnroll`, send 'install' ping\n  - else endStudy(\"ineligible\") and return\n\n- Every Run\n  - setActiveExperiment(studySetup)\n  - monitor shield | pioneer permission endings\n  - suggests alarming if `expire` is set.\n\nReturns:\n- studyInfo object (see `getStudyInfo`)\n\nTelemetry Sent (First run only)\n\n  - enter\n  - install\n\nFires Events\n\n(At most one of)\n- study:onReady  OR\n- study:onEndStudy\n\nPreferences set\n- `shield.${runtime.id}.firstRunTimestamp`\n\nNote:\n1. allowEnroll is ONLY used during first run (install)\n",
+        "parameters": [
+          {
+            "name": "studySetup",
+            "$ref": "studySetup"
+          }
+        ],
+        "returns": [
+          {
+            "$ref": "studyInfoObject"
+          }
+        ]
+      },
+      {
+        "name": "endStudy",
+        "type": "function",
+        "async": true,
+        "defaultReturn": {
+          "urls": [
+            "url1",
+            "url2"
+          ],
+          "endingName": "some-reason"
+        },
+        "description": "Signal to browser.study that it should end.\n\nUsage scenarios:\n- addons defined\n  - postive endings (tried feature)\n  - negative endings (client clicked 'no thanks')\n  - expiration / timeout (feature should last for 14 days then uninstall)\n\nLogic:\n- If study has already ended, do nothing.\n- Else: END\n\nEND:\n- record internally that study is ended.\n- disable all methods that rely on configuration / setup.\n- clear all prefs stored by `browser.study`\n- fire telemetry pings for:\n  - 'exit'\n  - the ending, one of:\n\n    \"ineligible\",\n    \"expired\",\n    \"user-disable\",\n    \"ended-positive\",\n    \"ended-neutral\",\n    \"ended-negative\",\n\n- augment all ending urls with query urls\n- fire 'study:end' event to `browser.study.onEndStudy` handlers.\n\nAddon should then do\n- open returned urls\n- feature specific cleanup\n- uninstall the addon\n\nNote:\n1.  calling this function multiple time is safe.\n`browser.study` will choose the\n",
+        "parameters": [
+          {
+            "name": "anEndingAlias",
+            "type": "string"
+          }
+        ],
+        "returns": [
+          {
+            "$ref": "anEndingAnswer"
+          }
+        ]
+      },
+      {
+        "name": "getStudyInfo",
+        "type": "function",
+        "async": true,
+        "description": "current study configuration, including\n- variation\n- activeExperimentName\n- delayInMinutes\n- firstRunTimestamp\n- isFirstRun\n\nBut not:\n- telemetry clientId\n\nThrows Error if called before `browser.study.setup`\n",
+        "defaultReturn": {
+          "variation": "styleA",
+          "firstRunTimestamp": 1523968204184,
+          "activeExperimentName": "some experiment",
+          "delayInMinutes": 12
+        },
+        "parameters": [],
+        "returns": [
+          {
+            "$ref": "studyInfoObject"
+          }
+        ]
+      },
+      {
+        "name": "sendTelemetry",
+        "type": "function",
+        "description": "Send Telemetry using appropriate shield or pioneer methods.\n\nshield:\n- `shield-study-addon` ping, requires object string keys and string values\n\npioneer:\n- TBD\n\nNote:\n- no conversions / coercion of data happens.\n\nNote:\n- undefined what happens if validation fails\n- undefined what happens when you try to send 'shield' from 'pioneer'\n\nTBD fix the parameters here.\n",
+        "async": true,
+        "parameters": [
+          {
+            "name": "payload",
+            "$ref": "telemetryPayload"
+          }
+        ],
+        "defaultReturn": "undefined",
+        "returns": null
+      },
+      {
+        "name": "searchSentTelemetry",
+        "type": "function",
+        "async": true,
+        "description": "Search locally stored telemetry pings using these fields (if set)\n\nn:\n  if set, no more than `n` pings.\ntype:\n  Array of 'ping types' (e.g., main, crash, shield-study-addon) to filter\nminimumTimestamp:\n  only pings after this timestamp.\nheadersOnly:\n  boolean.  If true, only the 'headers' will be returned.\n\nPings will be returned sorted by timestamp with most recent first.\n\nUsage scenarios:\n- enrollment / eligiblity using recent Telemetry behaviours or client environment\n- addon testing scenarios\n",
+        "defaultReturn": [
+          {
+            "pingType": "main"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "searchTelemetryQuery",
+            "$ref": "searchTelemetryQuery"
+          }
+        ]
+      },
+      {
+        "name": "surveyUrl",
+        "type": "function",
+        "async": true,
+        "description": "Format url with study covariate queryArgs appended / mixed in.\n\nUse this for constructing midpoint surveys.\n",
+        "defaultReturn": "https://example.com?version=59.0&branch=studyA",
+        "parameters": [
+          {
+            "name": "baseUrl",
+            "type": "string"
+          },
+          {
+            "name": "additionalFields",
+            "type": "object",
+            "optional": true
+          }
+        ],
+        "returns": [
+          {
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "validateJSON",
+        "type": "function",
+        "async": true,
+        "defaultReturn": {
+          "valid": true,
+          "errors": []
+        },
+        "description": "Using AJV, do jsonschema validation of an object.  Can be used to validate your arguments, packets at client.",
+        "parameters": [
+          {
+            "name": "someJson",
+            "type": "object",
+            "additionalProperties": true
+          },
+          {
+            "name": "jsonschema",
+            "type": "object",
+            "descripton": "a valid jsonschema object",
+            "additionalProperties": true
+          }
+        ],
+        "returns": [
+          {
+            "type": "object"
+          },
+          {
+            "parameters": null,
+            "valid": [
+              {
+                "type": "boolean"
+              }
+            ],
+            "errors": [
+              {
+                "type": "array"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "uninstall",
+        "type": "function",
+        "async": true,
+        "description": "\nUninstall this addon, using AddonManager.jsm.\n\nNo Telemetry.  No ending event triggered.  Just webExtenion removed.\n",
+        "parameters": []
+      }
+    ],
+    "events": [
+      {
+        "name": "onReady",
+        "type": "function",
+        "defaultReturn": {
+          "variation": "styleA",
+          "firstRunTimestamp": 1523968204184
+        },
+        "description": "Fires when the study is 'ready' for the feature to startup.",
+        "parameters": [
+          {
+            "name": "studyInfo",
+            "type": "object"
+          }
+        ]
+      },
+      {
+        "name": "onEndStudy",
+        "type": "function",
+        "defaultReturn": {
+          "urls": [],
+          "reason": "some-reason"
+        },
+        "description": "Listen for when the study wants to end.\n\nAct on it by\n- opening surveyUrls\n- tearing down your feature\n- uninstalling the addon\n",
+        "parameters": [
+          {
+            "name": "ending",
+            "type": "object"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "studyDebug",
+    "description": "Interface for Test Utilities",
+    "apiVersion": 5,
+    "functions": [
+      {
+        "name": "throwAnException",
+        "type": "function",
+        "description": "Throws an exception from a privileged function - for making sure that we can catch these in our web extension",
+        "async": false,
+        "parameters": [
+          {
+            "name": "message",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "throwAnExceptionAsync",
+        "type": "function",
+        "description": "Throws an exception from a privileged async function - for making sure that we can catch these in our web extension",
+        "async": true,
+        "parameters": [
+          {
+            "name": "message",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "firstSeen",
+        "type": "function",
+        "async": true,
+        "description": "",
+        "parameters": []
+      },
+      {
+        "name": "setActive",
+        "type": "function",
+        "async": true,
+        "description": "",
+        "parameters": []
+      },
+      {
+        "name": "startup",
+        "type": "function",
+        "async": true,
+        "description": "",
+        "parameters": [
+          {
+            "name": "details",
+            "type": "object",
+            "additionalProperties": true
+          }
+        ]
+      },
+      {
+        "name": "setFirstRunTimestamp",
+        "type": "function",
+        "async": true,
+        "description": "Set the pref for firstRunTimestamp, to simulate:\n- 2nd run\n- other useful tests around expiration and states.\n",
+        "parameters": [
+          {
+            "name": "timestamp",
+            "type": "number",
+            "minimum": 1
+          }
+        ]
+      },
+      {
+        "name": "reset",
+        "type": "function",
+        "async": true,
+        "description": "\nReset the studyUtils _internals, for debugging purposes.\n",
+        "parameters": []
+      },
+      {
+        "name": "getInternals",
+        "type": "function",
+        "async": true,
+        "description": "Return `_internals` of the studyUtils object.\n\nUse this for debugging state.\n\nAbout `this._internals`:\n- variation:  (chosen variation, `setup` )\n- isEnding: bool  `endStudy`\n- isSetup: bool   `setup`\n- isFirstRun: bool `setup`, based on pref\n- studySetup: bool  `setup` the config\n- seenTelemetry: object of lists of seen telemetry by bucket\n- prefs: object of all created prefs and their names\n",
+        "parameters": []
+      }
+    ]
+  },
+  {
+    "namespace": "prefs",
+    "description": "Temporary subset of `Services.prefs` API,\ndescribed at:  https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Services.jsm\n\nSee https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPrefBranch\n\nNo attempt here to improve the api at all.\n\nTODO: Convert observers to events.\n\nIf a true 'prefs' api lands in tree, this module will be removed.\n",
+    "apiVersion": 5,
+    "functions": [
+      {
+        "name": "getStringPref",
+        "type": "function",
+        "async": true,
+        "description": "",
+        "parameters": [
+          {
+            "name": "aPrefName",
+            "type": "string"
+          },
+          {
+            "name": "aDefaultValue",
+            "type": "string",
+            "optional": true
+          }
+        ]
+      }
+    ]
+  }
+]

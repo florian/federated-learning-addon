@@ -54,7 +54,7 @@ function processAwesomeBarSearch (el, callback) {
     }
 
     let selectedHistoryIndex = historySuggestions.indexOf(controller.getFinalCompleteValueAt(selectedIndex))
-    callback(historySuggestions, selectedHistoryIndex)
+    callback(historySuggestions, selectedHistoryIndex, searchQuery.length)
   }
 }
 

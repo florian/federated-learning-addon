@@ -1,10 +1,12 @@
 const URL_ENDPOINT = 'https://s3-us-west-2.amazonaws.com/telemetry-test-bucket/frecency/latest.json'
 const MINUTES_PER_ITERATION = 1 // Should be a dividor of 60
 const TELEMETRY_TOPIC = 'frecency_update'
+const TREATMENT_GROUP = "treatment"
 
 class ModelSynchronization {
-  constructor () {
+  constructor (studyInfo) {
     this.iteration = -1
+    this.studyInfo = studyInfo
     this.fetchModel()
   }
 
@@ -42,15 +44,23 @@ class ModelSynchronization {
   applyModelUpdate ({ iteration, model }) {
     this.iteration = iteration
 
-    for (let i = 0; i < PREFS.length; i++) {
-      browser.experiments.prefs.setIntPref(PREFS[i], model[i])
+    if (this.studyInfo.variation.name == TREATMENT_GROUP) {
+      for (let i = 0; i < PREFS.length; i++) {
+        browser.experiments.prefs.setIntPref(PREFS[i], model[i])
+      }
+
+      //browser.experiments.frecency.updateAllFrecencies()
     }
   }
 
-  pushModelUpdate (weights) {
+  pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars) {
     let payload = {
       iteration: this.iteration,
-      weights
+      loss,
+      weights,
+      num_suggestions_displayed: numSuggestionsDisplayed,
+      rank_selected: selectedIndex,
+      num_chars_typed: numTypedChars
     }
 
     let options = {

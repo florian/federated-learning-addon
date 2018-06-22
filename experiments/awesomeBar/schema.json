@@ -18,6 +18,10 @@
           {
             "name": "selectedHistoryIndex",
             "type": "number"
+          },
+          {
+            "name": "numTypedChars",
+            "type": "number"
           }
         ]
       }

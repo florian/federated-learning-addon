@@ -12,11 +12,12 @@
 
   "permissions": [
     "webRequest",
-    "<all_urls>"
+    "<all_urls>",
+    "storage"
   ],
 
   "background": {
-    "scripts": ["addon/prefs.js", "addon/synchronization.js", "addon/optimization.js", "addon/main.js"]
+    "scripts": ["addon/prefs.js", "addon/synchronization.js", "addon/optimization.js", "addon/studySetup.js", "addon/main.js"]
   },
 
   "experiment_apis": {
@@ -42,6 +43,14 @@
         "scopes": ["addon_parent"],
         "script": "experiments/awesomeBar/api.js",
         "paths": [["experiments", "awesomeBar"]]
+      }
+    },
+    "study": {
+      "schema": "experiments/study/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "script": "experiments/study/api.js",
+        "paths": [["study"]]
       }
     }
   }
