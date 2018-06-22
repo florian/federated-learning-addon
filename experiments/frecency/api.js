@@ -18,8 +18,8 @@ var frecency = class extends ExtensionAPI {
             return stmt.row.frecency
           },
 
-          updateAllFrecencies () {
-            PlacesUtils.withConnectionWrapper('frecency-update', async (db) => {
+          async updateAllFrecencies () {
+            await PlacesUtils.withConnectionWrapper('frecency-update', async (db) => {
               db.execute('UPDATE moz_places SET frecency = CALCULATE_FRECENCY(id)')
             })
           }
