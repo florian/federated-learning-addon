@@ -19,9 +19,9 @@ var frecency = class extends ExtensionAPI {
           },
 
           updateAllFrecencies () {
-            let db = PlacesUtils.history.DBConnection
-            let stmt = db.createStatement('UPDATE moz_places SET frecency = CALCULATE_FRECENCY(id)')
-            stmt.executeStep()
+            PlacesUtils.withConnectionWrapper('frecency-update', async (db) => {
+              db.execute('UPDATE moz_places SET frecency = CALCULATE_FRECENCY(id)')
+            })
           }
         }
       }
