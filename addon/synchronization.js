@@ -1,22 +1,30 @@
 const URL_ENDPOINT = 'https://s3-us-west-2.amazonaws.com/telemetry-test-bucket/frecency/latest.json'
-const TIME_INTERVAL = 1 * 60 * 1000
-// TIME_INTERVAL = 30 * 60 * 1000
-const EXTRA_DELAY = 5 * 1000
-// EXTRA_DELAY = 30 * 1000
+const MINUTES_PER_ITERATION = 1 // Should be a dividor of 60
 const TELEMETRY_TOPIC = 'frecency_update'
 
 class ModelSynchronization {
   constructor () {
     this.iteration = -1
     this.fetchModel()
-    this.bindEvents()
   }
 
-  bindEvents () {
-    let now = new Date()
-    let firstDelay = TIME_INTERVAL - now.getSeconds() * 1000
-    firstDelay += EXTRA_DELAY
-    setTimeout(this.fetchModel.bind(this), firstDelay)
+  msUntilNextIteration () {
+    // Begin a new iteration every MINUTES_PER_ITERATION, starting from a full hour
+    const now = new Date()
+    const m = now.getMinutes()
+    const s = now.getSeconds()
+    const ms = now.getMilliseconds()
+
+    // Seconds and milliseconds until the next full minute starts
+    // -1 because everything is 0-based
+    const msUntilNextMinute = (60 - s - 1) * 1000 + (1000 - ms - 1)
+
+    // Remaining minutes until the next iteration begins
+    const minutesSinceLastIteration = m % MINUTES_PER_ITERATION
+    const minutesMissing = MINUTES_PER_ITERATION - minutesSinceLastIteration - 1
+
+    // Combining both
+    return msUntilNextMinute + minutesMissing * 60 * 1000
   }
 
   fetchModel () {
@@ -24,7 +32,11 @@ class ModelSynchronization {
       .then((response) => response.json())
       .then(this.applyModelUpdate.bind(this))
 
-    setTimeout(this.fetchModel.bind(this), TIME_INTERVAL + EXTRA_DELAY)
+    this.setTimer()
+  }
+
+  setTimer () {
+    setTimeout(this.fetchModel.bind(this), this.msUntilNextIteration())
   }
 
   applyModelUpdate ({ iteration, model }) {
