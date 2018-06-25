@@ -54,12 +54,11 @@ var frecency = class extends ExtensionAPI {
             let promises = []
 
             for (let i = 0; i < count; i += CHUNK_SIZE) {
-              console.log(i)
-              PlacesUtils.withConnectionWrapper('frecency-update', async (db) => {
-                promises.push(db.execute(`UPDATE moz_places SET frecency = 5 WHERE id in (
+              promises.push(PlacesUtils.withConnectionWrapper('frecency-update', async (db) => {
+                promises.push(db.execute(`UPDATE moz_places SET frecency = CALCULATE_FRECENCY(id) WHERE id in (
                 SELECT id FROM moz_places ORDER BY id LIMIT ? OFFSET ?
               )`, [CHUNK_SIZE, i]))
-              })
+              }))
             }
 
             Promise.all(promises).then(restoreFrecencyTrigger)
