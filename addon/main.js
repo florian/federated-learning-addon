@@ -9,3 +9,5 @@ async function main () {
 }
 
 main()
+
+console.log(setTimeout, "tim")
