@@ -6,6 +6,7 @@ async function main () {
   const optimizer = new FrecencyOptimizer(synchronizer, svmLoss)
 
   browser.experiments.awesomeBar.onHistorySearch.addListener(optimizer.step.bind(optimizer))
+  browser.study.onEndStudy.addListener(optimizer.reset)
 }
 
 main()
