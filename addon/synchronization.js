@@ -1,6 +1,5 @@
 const URL_ENDPOINT = 'https://s3-us-west-2.amazonaws.com/telemetry-test-bucket/frecency/latest.json'
 const MINUTES_PER_ITERATION = 1 // Should be a dividor of 60
-const TELEMETRY_TOPIC = 'frecency_update'
 const TREATMENT_GROUP = "treatment"
 
 class ModelSynchronization {
@@ -48,27 +47,14 @@ class ModelSynchronization {
       for (let i = 0; i < PREFS.length; i++) {
         browser.experiments.prefs.setIntPref(PREFS[i], model[i])
       }
-
-      //browser.experiments.frecency.updateAllFrecencies()
     }
+
+    browser.experiments.frecency.updateAllFrecencies()
   }
 
   pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars) {
-    let payload = {
-      iteration: this.iteration,
-      loss,
-      weights,
-      num_suggestions_displayed: numSuggestionsDisplayed,
-      rank_selected: selectedIndex,
-      num_chars_typed: numTypedChars
+    if (this.studyInfo.variation.name == TREATMENT_GROUP) {
+      //browser.experiments.telemetry.submitPing(this.iteration, weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars)
     }
-
-    let options = {
-      addClientId: true
-    }
-
-    console.log(payload)
-
-    // TelemetryController.submitExternalPing(TELEMETRY_TOPIC, payload, options)
   }
 }

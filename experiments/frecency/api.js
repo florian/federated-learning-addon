@@ -4,7 +4,7 @@
 
 ChromeUtils.import('resource://gre/modules/PlacesUtils.jsm')
 
-const CHUNK_SIZE = 400
+const CHUNK_SIZE = 5000
 
 function removeFrecencyTrigger () {
   let db = PlacesUtils.history.DBConnection
@@ -44,11 +44,11 @@ var frecency = class extends ExtensionAPI {
             let promises = []
 
             for (let i = 0; i < count; i += CHUNK_SIZE) {
-              promises.push(PlacesUtils.withConnectionWrapper('frecency-update', async (db) => {
+              await PlacesUtils.withConnectionWrapper('frecency-update', async (db) => {
                 promises.push(db.execute(`UPDATE moz_places SET frecency = CALCULATE_FRECENCY(id) WHERE id in (
                 SELECT id FROM moz_places ORDER BY id LIMIT ? OFFSET ?
               )`, [CHUNK_SIZE, i]))
-              }))
+              })
             }
 
             return Promise.all(promises).then(restoreFrecencyTrigger)
