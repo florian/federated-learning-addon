@@ -1,5 +1,5 @@
 async function svmLoss (urls, correct) {
-  let frecencies = await Promise.all(urls.map(url => browser.experiments.frecency.calculateByURL(url)))
+  let frecencies = await urlsToFrecencies(urls)
   let correctFrecency = frecencies[correct]
 
   let loss = 0
@@ -13,6 +13,10 @@ async function svmLoss (urls, correct) {
   return loss
 }
 
+async function urlsToFrecencies (urls) {
+  return Promise.all(urls.map(url => browser.experiments.frecency.calculateByURL(url)))
+}
+
 class FrecencyOptimizer {
   constructor (synchronizer, lossFn, eps = 1) {
     this.synchronizer = synchronizer
@@ -22,7 +26,8 @@ class FrecencyOptimizer {
 
   async step (urls, selectedIndex, numTypedChars) {
     let gradient = await this.computeGradient(urls, selectedIndex)
-    this.synchronizer.pushModelUpdate(gradient, await svmLoss(urls, selectedIndex), urls.length, selectedIndex, numTypedChars)
+    let frecencies = await urlsToFrecencies(urls)
+    this.synchronizer.pushModelUpdate(gradient, await svmLoss(urls, selectedIndex), urls.length, selectedIndex, numTypedChars, frecencies)
   }
 
   async computeGradient (urls, selectedIndex) {

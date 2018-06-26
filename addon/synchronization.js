@@ -52,9 +52,34 @@ class ModelSynchronization {
     browser.experiments.frecency.updateAllFrecencies()
   }
 
-  pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars) {
-    if (this.studyInfo.variation.name == TREATMENT_GROUP) {
-      //browser.experiments.telemetry.submitPing(this.iteration, weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars)
+  pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars, frecencies) {
+    let payload = {
+      iteration: this.iteration,
+      loss,
+      weights,
+      num_suggestions_displayed: numSuggestionsDisplayed,
+      rank_selected: selectedIndex,
+      num_chars_typed: numTypedChars
     }
+
+    // Telemetry Pings are only for treatment because we need to quickly apply the updates
+    if (this.studyInfo.variation.name == TREATMENT_GROUP) {
+      browser.experiments.telemetry.submitPing(payload)
+    }
+
+    // Telemetry events are used in both groups to evaluate the results afterwards
+    let eventPayload = {
+      iteration: this.iteration,
+      loss,
+      weights,
+      numSuggestions: numSuggestionsDisplayed,
+      rankSelected: selectedIndex,
+      numCharsTyped: numTypedChars,
+      frecencies
+    }
+
+    console.log(eventPayload)
+
+    browser.experiments.telemetry.recordEvent(eventPayload)
   }
 }

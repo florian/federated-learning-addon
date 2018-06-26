@@ -52,6 +52,14 @@
         "script": "experiments/study/api.js",
         "paths": [["study"]]
       }
+    },
+    "telemetry": {
+      "schema": "experiments/telemetry/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "script": "experiments/telemetry/api.js",
+        "paths": [["experiments", "telemetry"]]
+      }
     }
   }
 }

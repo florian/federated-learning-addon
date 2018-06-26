@@ -1,0 +1,52 @@
+[
+  {
+    "namespace": "experiments.telemetry",
+    "description": "Send Telemetry data",
+    "functions": [
+      {
+        "name": "registerEvents",
+        "type": "function",
+        "description": "Registers all required dynamic events",
+        "async": false,
+        "parameters": []
+      },
+      {
+        "name": "submitPing",
+        "type": "function",
+        "description": "Submit a Telemetry ping",
+        "async": false,
+        "parameters": [{
+        	"name": "payload",
+        	"type": "object",
+        	"properties": {
+        	  "iteration": { "type": "number" },
+        	  "loss": { "type": "number" },
+        	  "num_chars_typed": { "type": "number" },
+        	  "num_suggestions_displayed": { "type": "number" },
+        	  "rank_selected": { "type": "number" },
+        	  "weights": { "type": "array", "items": { "type": "number" } }
+          }
+        }]
+      },
+      {
+        "name": "recordEvent",
+        "type": "function",
+        "description": "Record a Telemetry event",
+        "async": false,
+        "parameters": [{
+        	"name": "payload",
+        	"type": "object",
+        	"properties": {
+        	  "iteration": { "type": "number" },
+        	  "loss": { "type": "number" },
+        	  "numCharsTyped": { "type": "number" },
+        	  "numSuggestions": { "type": "number" },
+        	  "rankSelected": { "type": "number" },
+        	  "weights": { "type": "array", "items": { "type": "number" } },
+        	  "frecencies": { "type": "array", "items": { "type": "number" } }
+          }
+        }]
+      }
+    ]
+  }
+]
