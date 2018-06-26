@@ -1,7 +1,5 @@
 'use strict'
 
-/* global Components, ExtensionAPI */
-
 ChromeUtils.import('resource://gre/modules/PlacesUtils.jsm')
 
 const CHUNK_SIZE = 5000
@@ -21,7 +19,6 @@ CREATE TEMP TRIGGER moz_places_afterupdate_frecency_trigger AFTER UPDATE OF frec
   stmt.executeStep()
 }
 
-/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "crash" }] */
 var frecency = class extends ExtensionAPI {
   getAPI () {
     return {
@@ -38,8 +35,8 @@ var frecency = class extends ExtensionAPI {
           async updateAllFrecencies () {
             removeFrecencyTrigger()
 
-            let res = await PlacesUtils.withConnectionWrapper("federated-learning", async db => db.execute("SELECT COUNT(*) as count FROM moz_places"))
-            let count = res[0].getResultByName("count")
+            let res = await PlacesUtils.withConnectionWrapper('federated-learning', async db => db.execute('SELECT COUNT(*) as count FROM moz_places'))
+            let count = res[0].getResultByName('count')
 
             let promises = []
 
