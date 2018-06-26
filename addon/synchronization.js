@@ -1,6 +1,6 @@
 const URL_ENDPOINT = 'https://s3-us-west-2.amazonaws.com/telemetry-test-bucket/frecency/latest.json'
 const MINUTES_PER_ITERATION = 1 // Should be a dividor of 60
-const TREATMENT_GROUP = "treatment"
+const TREATMENT_GROUP = 'treatment'
 
 class ModelSynchronization {
   constructor (studyInfo) {
@@ -43,7 +43,7 @@ class ModelSynchronization {
   applyModelUpdate ({ iteration, model }) {
     this.iteration = iteration
 
-    if (this.studyInfo.variation.name == TREATMENT_GROUP) {
+    if (this.studyInfo.variation.name === TREATMENT_GROUP) {
       for (let i = 0; i < PREFS.length; i++) {
         browser.experiments.prefs.setIntPref(PREFS[i], model[i])
       }
@@ -54,32 +54,15 @@ class ModelSynchronization {
 
   pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars, frecencies) {
     let payload = {
-      iteration: this.iteration,
+      model_version: this.iteration,
       loss,
-      weights,
+      update: weights,
       num_suggestions_displayed: numSuggestionsDisplayed,
       rank_selected: selectedIndex,
-      num_chars_typed: numTypedChars
+      num_chars_typed: numTypedChars,
+      study_variation: this.studyInfo.variation.name
     }
 
-    // Telemetry Pings are only for treatment because we need to quickly apply the updates
-    if (this.studyInfo.variation.name == TREATMENT_GROUP) {
-      browser.experiments.telemetry.submitPing(payload)
-    }
-
-    // Telemetry events are used in both groups to evaluate the results afterwards
-    let eventPayload = {
-      iteration: this.iteration,
-      loss,
-      weights,
-      numSuggestions: numSuggestionsDisplayed,
-      rankSelected: selectedIndex,
-      numCharsTyped: numTypedChars,
-      frecencies
-    }
-
-    console.log(eventPayload)
-
-    browser.experiments.telemetry.recordEvent(eventPayload)
+    browser.experiments.telemetry.submitPing(payload)
   }
 }
