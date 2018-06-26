@@ -1,4 +1,8 @@
 const PREFS = [
+  'places.frecency.firstBucketCutoff',
+  'places.frecency.secondBucketCutoff',
+  'places.frecency.thirdBucketCutoff',
+  'places.frecency.fourthBucketCutoff',
   'places.frecency.firstBucketWeight',
   'places.frecency.secondBucketWeight',
   'places.frecency.thirdBucketWeight',
@@ -20,6 +24,10 @@ const PREFS = [
 ]
 
 const DEFAULT_PREF_VALUES = [
+  4,
+  14,
+  31,
+  90,
   100,
   70,
   50,
