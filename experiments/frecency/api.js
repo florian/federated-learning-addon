@@ -13,21 +13,11 @@ function removeFrecencyTrigger () {
 }
 
 function restoreFrecencyTrigger () {
+  // Query from https://dxr.mozilla.org/mozilla-central/source/toolkit/components/places/nsPlacesTriggers.h#176
   let db = PlacesUtils.history.DBConnection
   let stmt = db.createStatement(`
-  CREATE TEMP TRIGGER moz_places_afterupdate_frecency_trigger
-  AFTER UPDATE OF frecency ON moz_places FOR EACH ROW
-  WHEN NEW.frecency >= 0 AND NOT is_frecency_decaying()
-  BEGIN
-    UPDATE moz_origins
-    SET frecency (
-    SELECT IFNULL(MAX(frecency), 0)
-      FROM moz_places
-      WHERE moz_places.origin_id = moz_origins.id
-    )
-    WHERE id = NEW.origin_id;
-    UPDATE_FRECENCY_STATS_AFTER_UPDATE
-  END`)
+CREATE TEMP TRIGGER moz_places_afterupdate_frecency_trigger AFTER UPDATE OF frecency ON moz_places FOR EACH ROW WHEN NEW.frecency >= 0 AND NOT is_frecency_decaying() BEGIN UPDATE moz_origins SET frecency = ( SELECT IFNULL(MAX(frecency), 0) FROM moz_places WHERE moz_places.origin_id = moz_origins.id  ) WHERE id = NEW.origin_id; INSERT OR REPLACE INTO moz_meta(key, value) VALUES ( 'frecency_count', CAST(IFNULL((SELECT value FROM moz_meta WHERE key = 'frecency_count'), 0) AS INTEGER) - (CASE WHEN OLD.frecency <= 0 OR OLD.id < 0 THEN 0 ELSE 1 END) + (CASE WHEN NEW.frecency <= 0 OR NEW.id < 0 THEN 0 ELSE 1 END)  ), ( 'frecency_sum', CAST(IFNULL((SELECT value FROM moz_meta WHERE key = 'frecency_sum'), 0) AS INTEGER) - (CASE WHEN OLD.frecency <= 0 OR OLD.id < 0 THEN 0 ELSE OLD.frecency END) + (CASE WHEN NEW.frecency <= 0 OR NEW.id < 0 THEN 0 ELSE NEW.frecency END)  ), ( 'frecency_sum_of_squares', CAST(IFNULL((SELECT value FROM moz_meta WHERE key = 'frecency_sum_of_squares'), 0) AS INTEGER) - (CASE WHEN OLD.frecency <= 0 OR OLD.id < 0 THEN 0 ELSE OLD.frecency * OLD.frecency END) + (CASE WHEN NEW.frecency <= 0 OR NEW.id < 0 THEN 0 ELSE NEW.frecency * NEW.frecency END)  ); END
+`)
   stmt.executeStep()
 }
 
@@ -61,7 +51,7 @@ var frecency = class extends ExtensionAPI {
               }))
             }
 
-            Promise.all(promises).then(restoreFrecencyTrigger)
+            return Promise.all(promises).then(restoreFrecencyTrigger)
           }
         }
       }
