@@ -3,14 +3,14 @@ const baseStudySetup = {
   activeExperimentName: browser.runtime.id,
 
   // uses shield sampling and telemetry semantics.  Future: will support "pioneer"
-  studyType: "shield",
+  studyType: 'shield',
 
   // telemetry
   telemetry: {
     // default false. Actually send pings.
     send: true,
     // Marks pings with testing=true.  Set flag to `true` before final release
-    removeTestingFlag: false,
+    removeTestingFlag: false
   },
 
   // endings with urls
@@ -20,25 +20,25 @@ const baseStudySetup = {
   // Study branches and sample weights, overweighing feature branches
   weightedVariations: [
     {
-      name: "treatment",
-      weight: 0.5,
+      name: 'treatment',
+      weight: 0.5
     },
     {
-      name: "control",
-      weight: 0.5,
+      name: 'control',
+      weight: 0.5
     }
   ],
 
   // maximum time that the study should run, from the first run
   expire: {
-    days: 14,
-  },
-};
+    days: 14
+  }
+}
 
-async function cachingFirstRunShouldAllowEnroll() {
+async function cachingFirstRunShouldAllowEnroll () {
   // Cached answer.  Used on 2nd run
-  let allowed = await browser.storage.local.get("allowEnroll");
-  if (allowed) return true;
+  let allowed = await browser.storage.local.get('allowEnroll')
+  if (allowed) return true
 
   /*
   First run, we must calculate the answer.
@@ -46,11 +46,11 @@ async function cachingFirstRunShouldAllowEnroll() {
   */
 
   // could have other reasons to be eligible, such add-ons, prefs
-  allowed = true;
+  allowed = true
 
   // cache the answer
-  await browser.storage.local.set({ allowEnroll: allowed });
-  return allowed;
+  await browser.storage.local.set({ allowEnroll: allowed })
+  return allowed
 }
 
 /**
@@ -58,7 +58,7 @@ async function cachingFirstRunShouldAllowEnroll() {
  *
  * @return {object} studySetup A complete study setup object
  */
-async function getStudySetup() {
+async function getStudySetup () {
   /*
    * const id = browser.runtime.id;
    * const prefs = {
@@ -67,14 +67,14 @@ async function getStudySetup() {
    */
 
   // shallow copy
-  const studySetup = Object.assign({}, baseStudySetup);
+  const studySetup = Object.assign({}, baseStudySetup)
 
-  studySetup.allowEnroll = await cachingFirstRunShouldAllowEnroll();
+  studySetup.allowEnroll = await cachingFirstRunShouldAllowEnroll()
   studySetup.testing = {
     /* Example: override testing keys various ways, such as by prefs. (TODO) */
     variationName: null, // await browser.prefs.getStringPref(prefs.variationName);
     firstRunTimestamp: null,
-    expired: null,
-  };
-  return studySetup;
+    expired: null
+  }
+  return studySetup
 }
