@@ -9,7 +9,8 @@ const { ExtensionCommon } = ChromeUtils.import(
 const { EventManager } = ExtensionCommon
 
 const EVENT = 'autocomplete-will-enter-text'
-const NON_HISTORY_STYLES = ['switchtab', 'remotetab', 'searchengine', 'visiturl', 'extension', 'suggestion', 'keyword'] // bookmark
+// Bookmarks are not included for now because we also want to take them into account
+const NON_HISTORY_STYLES = ['switchtab', 'remotetab', 'searchengine', 'visiturl', 'extension', 'suggestion', 'keyword']
 
 var awesomeBar = class extends ExtensionAPI {
   getAPI (context) {
