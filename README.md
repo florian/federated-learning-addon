@@ -28,8 +28,11 @@ These updates are collected using Telemetry.
 - `studySetup` is adapted from [`shield-studies-addon-utils`](https://github.com/mozilla/shield-studies-addon-utils) and configures the study
 - `main.js` connects everything.
 
-## Other links
+## References
 
 - [Blog post](https://florian.github.io/federated-learning/) explaining the concepts behind federated learning
 - [Bugzilla](https://bugzilla.mozilla.org/show_bug.cgi?id=1462102)
-- [frecency documentation](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/Places/Frecency_algorithm) (a bit outdated)
+- [Federated learning simulations](https://github.com/florian/federated-learning)
+- Documentation about
+   - [frecency](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/Places/Frecency_algorithm) (a bit outdated)
+   - [metrics sent to Mozilla](METRICS.md)
