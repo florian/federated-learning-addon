@@ -18,6 +18,7 @@ These updates are collected using Telemetry.
 - `frecency`: For interacting with the `moz_places` table and recalculating / changing frecency scores
 - `awesomeBar`: For observing interactions with the awesome bar. The required information for history / bookmark searches is retrieved (number of typed characters, selected suggestion, features of other suggestions)
 - `prefs`: For reading and writing preferences. This is just used to update the weights
+- `telemetry`: For sending back updates and meta information
 - `study` from [`shield-studies-addon-utils`](https://github.com/mozilla/shield-studies-addon-utils) for study related helpers
 
 ### Core components
