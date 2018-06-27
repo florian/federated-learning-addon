@@ -21,7 +21,7 @@ var awesomeBar = class extends ExtensionAPI {
             context,
             name: 'awesomeBar.onHistorySearch',
             register: fire => {
-              Services.obs.addObserver(el => processAwesomeBarSearch(el, fire.async), 'autocomplete-will-enter-text', false)
+              Services.obs.addObserver(el => processAwesomeBarSearch(el, fire.async), EVENT, false)
             }
           }).api()
         }
