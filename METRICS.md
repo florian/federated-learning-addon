@@ -70,4 +70,4 @@ The following data is sent with this ping:
 ## References
 
 - [Bugzilla bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1462109) detailing the data review request
-- [ping schema](https://bugzilla.mozilla.org/show_bug.cgi?id=1462109)
+- [ping schema](https://github.com/mozilla-services/mozilla-pipeline-schemas/tree/dev/templates/telemetry/frecency-update)
