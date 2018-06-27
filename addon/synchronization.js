@@ -52,9 +52,10 @@ class ModelSynchronization {
     browser.experiments.frecency.updateAllFrecencies()
   }
 
-  pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars, frecencies) {
+  pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars, frecency_scores) {
     let payload = {
       model_version: this.iteration,
+      frecency_scores,
       loss,
       update: weights,
       num_suggestions_displayed: numSuggestionsDisplayed,

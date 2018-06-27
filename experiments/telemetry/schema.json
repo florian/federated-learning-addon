@@ -19,6 +19,7 @@
         	"name": "payload",
         	"type": "object",
         	"properties": {
+        	  "frecency_scores": { "type": "array", "items": { "type": "number" } },
         	  "model_version": { "type": "number" },
         	  "loss": { "type": "number" },
         	  "num_chars_typed": { "type": "number" },
