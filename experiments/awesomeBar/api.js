@@ -43,10 +43,10 @@ function processAwesomeBarSearch (el, callback) {
     let historySuggestions = []
 
     for (var i = 0; i < numberOfSuggestions; i++) {
-      let url = controller.getFinalCompleteValueAt(i)
       let isHistory = isHistoryStyle(controller.getStyleAt(i))
 
       if (isHistory) {
+        let url = controller.getFinalCompleteValueAt(i)
         historySuggestions.push(url)
       }
     }
