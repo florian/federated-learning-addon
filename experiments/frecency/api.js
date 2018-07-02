@@ -24,12 +24,11 @@ var frecency = class extends ExtensionAPI {
     return {
       experiments: {
         frecency: {
-          calculateByURL (url) {
-            let db = PlacesUtils.history.DBConnection
-            let stmt = db.createStatement('SELECT CALCULATE_FRECENCY(id) as frecency FROM moz_places WHERE url_hash = hash(:url)')
-            stmt.bindByName('url', url)
-            stmt.executeStep()
-            return stmt.row.frecency
+          async calculateByURL (url) {
+            let res = await PlacesUtils.withConnectionWrapper("federated-learning", async db => db.execute(
+              "SELECT CALCULATE_FRECENCY(id) as frecency FROM moz_places WHERE url_hash = hash(?)", [url])
+            )
+            return res[0].getResultByName('frecency')
           },
 
           async updateAllFrecencies () {
