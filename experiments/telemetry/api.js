@@ -10,16 +10,6 @@ var telemetry = class extends ExtensionAPI {
     return {
       experiments: {
         telemetry: {
-          registerEvents () {
-            Services.telemetry.registerEvents(TELEMETRY_EVENT_CATEGORY, {
-              suggestion_selected: {
-                methods: [TELEMETRY_EVENT_METHOD],
-                objects: [TELEMETRY_EVENT_OBJECT],
-                extra_keys: TELEMETRY_EVENT_EXTRA_KEYS
-              }
-            })
-          },
-
           submitPing (payload) {
             let options = {
               addClientId: true
