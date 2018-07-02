@@ -4,13 +4,6 @@
     "description": "Send Telemetry data",
     "functions": [
       {
-        "name": "registerEvents",
-        "type": "function",
-        "description": "Registers all required dynamic events",
-        "async": false,
-        "parameters": []
-      },
-      {
         "name": "submitPing",
         "type": "function",
         "description": "Submit a Telemetry ping",
