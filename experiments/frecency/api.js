@@ -19,6 +19,11 @@ CREATE TEMP TRIGGER moz_places_afterupdate_frecency_trigger AFTER UPDATE OF frec
   })
 }
 
+async function getMozPlacesCount () {
+  let res = await PlacesUtils.withConnectionWrapper('federated-learning', async db => db.execute('SELECT COUNT(*) as count FROM moz_places'))
+  return res[0].getResultByName('count')
+}
+
 var frecency = class extends ExtensionAPI {
   getAPI () {
     return {
@@ -34,9 +39,7 @@ var frecency = class extends ExtensionAPI {
           async updateAllFrecencies () {
             await removeFrecencyTrigger()
 
-            let res = await PlacesUtils.withConnectionWrapper('federated-learning', async db => db.execute('SELECT COUNT(*) as count FROM moz_places'))
-            let count = res[0].getResultByName('count')
-
+            let count = await getMozPlacesCount()
             let promises = []
 
             for (let i = 0; i < count; i += CHUNK_SIZE) {
@@ -45,6 +48,11 @@ var frecency = class extends ExtensionAPI {
                 SELECT id FROM moz_places ORDER BY id LIMIT ? OFFSET ?
               )`, [CHUNK_SIZE, i]))
               })
+
+              // In the last iteration we want to check if new rows were added
+              if (i + CHUNK_SIZE >= count) {
+                count = await getMozPlacesCount()
+              }
             }
 
             return await Promise.all(promises).then(restoreFrecencyTrigger)
