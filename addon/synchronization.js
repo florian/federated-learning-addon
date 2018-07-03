@@ -1,6 +1,7 @@
 const URL_ENDPOINT = 'https://s3-us-west-2.amazonaws.com/telemetry-test-bucket/frecency/latest.json'
 const MINUTES_PER_ITERATION = 30 // Should be a dividor of 60
 const TREATMENT_GROUP = 'treatment'
+const CONTROL_GROUP = 'control'
 
 class ModelSynchronization {
   constructor (studyInfo) {
@@ -49,7 +50,9 @@ class ModelSynchronization {
       }
     }
 
-    browser.experiments.frecency.updateAllFrecencies()
+    if (this.studyInfo.variation.name !== CONTROL_GROUP) {
+      browser.experiments.frecency.updateAllFrecencies()
+    }
   }
 
   pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars, frecency_scores) {
