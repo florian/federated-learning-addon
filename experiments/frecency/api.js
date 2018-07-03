@@ -2,7 +2,7 @@
 
 ChromeUtils.import('resource://gre/modules/PlacesUtils.jsm')
 
-const CHUNK_SIZE = 5000
+const CHUNK_SIZE = 1000
 
 async function removeFrecencyTrigger () {
   return await PlacesUtils.withConnectionWrapper("federated-learning", async db => {
@@ -44,9 +44,9 @@ var frecency = class extends ExtensionAPI {
 
             for (let i = 0; i < count; i += CHUNK_SIZE) {
               await PlacesUtils.withConnectionWrapper('frecency-update', async (db) => {
-                promises.push(db.execute(`UPDATE moz_places SET frecency = CALCULATE_FRECENCY(id) WHERE id in (
+                await db.execute(`UPDATE moz_places SET frecency = CALCULATE_FRECENCY(id) WHERE id in (
                 SELECT id FROM moz_places ORDER BY id LIMIT ? OFFSET ?
-              )`, [CHUNK_SIZE, i]))
+              )`, [CHUNK_SIZE, i])
               })
 
               // In the last iteration we want to check if new rows were added
@@ -55,7 +55,7 @@ var frecency = class extends ExtensionAPI {
               }
             }
 
-            return await Promise.all(promises).then(restoreFrecencyTrigger)
+            return await restoreFrecencyTrigger()
           }
         }
       }
