@@ -11,6 +11,12 @@ These updates are collected using Telemetry.
 1. Go to `about:config` and set `extensions.legacy.enabled` to `true`
 2. Go to `about:debugging`, click *Load Temporary Add-on* and select `manifest.json`
 
+## Study variations
+
+- `treatment`: The full optimization process is performed, weights change after every iteration and the ranking is recomputed
+- `control`: Search works exactly the same way it currently does in Firefox, we only collect additional statistics
+- `control-no-decay`: In the current algorithm, frecency scores are decayed over time. `treatment` loses this effect since scores are recomputed all the time. To see if the decaying is useful and to make a fairer comparison, this variation only removes the decaying effect
+
 ## Components
 
 ### Experiment APIs
