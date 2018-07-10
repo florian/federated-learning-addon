@@ -55,7 +55,7 @@ class ModelSynchronization {
     }
   }
 
-  pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars, frecency_scores) {
+  async pushModelUpdate (weights, loss, numSuggestionsDisplayed, selectedIndex, numTypedChars, frecency_scores) {
     let payload = {
       model_version: this.iteration,
       frecency_scores,
@@ -67,6 +67,11 @@ class ModelSynchronization {
       study_variation: this.studyInfo.variation.name
     }
 
-    browser.experiments.telemetry.submitPing(payload)
+    const windowInfo = await browser.windows.getLastFocused()
+    console.log("info", windowInfo.incognito)
+
+    if (!windowInfo.incognito) {
+      browser.experiments.telemetry.submitPing(payload)
+    }
   }
 }

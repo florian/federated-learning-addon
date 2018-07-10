@@ -33,7 +33,11 @@ var frecency = class extends ExtensionAPI {
             let res = await PlacesUtils.withConnectionWrapper("federated-learning", async db => db.execute(
               "SELECT CALCULATE_FRECENCY(id) as frecency FROM moz_places WHERE url_hash = hash(?)", [url])
             )
-            return res[0].getResultByName('frecency')
+            if (res.length >= 1) {
+              return res[0].getResultByName('frecency')
+            } else {
+              return -1
+            }
           },
 
           async updateAllFrecencies () {

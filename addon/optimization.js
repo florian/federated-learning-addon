@@ -27,7 +27,7 @@ class FrecencyOptimizer {
   async step (urls, selectedIndex, numTypedChars) {
     let gradient = await this.computeGradient(urls, selectedIndex)
     let frecencies = await urlsToFrecencies(urls)
-    this.synchronizer.pushModelUpdate(gradient, await svmLoss(urls, selectedIndex), urls.length, selectedIndex, numTypedChars, frecencies)
+    await this.synchronizer.pushModelUpdate(gradient, await svmLoss(urls, selectedIndex), urls.length, selectedIndex, numTypedChars, frecencies)
   }
 
   async computeGradient (urls, selectedIndex) {
