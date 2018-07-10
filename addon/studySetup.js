@@ -39,6 +39,18 @@ const baseStudySetup = {
   }
 }
 
+const VARIATION_PREF_NAME = "federated-learning.frecency.variation"
+const { prefs } = browser.experiments
+
+async function setStudyVariation(studyInfo) {
+  if (await prefs.getPrefType(VARIATION_PREF_NAME) === 0) {
+    await prefs.setStringPref(VARIATION_PREF_NAME, studyInfo.variation.name)
+  } else {
+    const variation = await prefs.getStringPref(VARIATION_PREF_NAME)
+    studyInfo.variation.name = variation
+  }
+}
+
 async function cachingFirstRunShouldAllowEnroll () {
   // Cached answer.  Used on 2nd run
   let allowed = await browser.storage.local.get('allowEnroll')

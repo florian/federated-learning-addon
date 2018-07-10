@@ -30,6 +30,46 @@
             "type": "any"
           }
         ]
+      },
+      {
+        "name": "getStringPref",
+        "type": "function",
+        "description": "Returns the value of a pref",
+        "async": true,
+        "parameters": [
+          {
+            "name": "prefName",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "setStringPref",
+        "type": "function",
+        "description": "Sets the value of a pref",
+        "async": true,
+        "parameters": [
+          {
+            "name": "prefName",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "any"
+          }
+        ]
+      },
+      {
+        "name": "getPrefType",
+        "type": "function",
+        "description": "Get the type of a pref",
+        "async": true,
+        "parameters": [
+          {
+            "name": "prefName",
+            "type": "string"
+          }
+        ]
       }
     ]
   }
