@@ -11,6 +11,8 @@ These updates are collected using Telemetry.
 1. Go to `about:config` and set `extensions.legacy.enabled` to `true`
 2. Go to `about:debugging`, click *Load Temporary Add-on* and select `manifest.json`
 
+The addon was built for a beta version of Firefox.
+
 ## Study variations
 
 - `treatment`: The full optimization process is performed, weights change after every iteration and the ranking is recomputed
@@ -37,6 +39,14 @@ After the pref was changed, the browser has to be restarted so that the change i
 - `optimization`: For computing model updates
 - `studySetup` is adapted from [`shield-studies-addon-utils`](https://github.com/mozilla/shield-studies-addon-utils) and configures the study
 - `main.js` connects everything.
+
+## Building the addon
+
+```
+npm run build
+```
+
+Depending on what should be done with the build, it still needs to be signed by someone else.
 
 ## References
 
