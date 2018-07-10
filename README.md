@@ -43,7 +43,7 @@ After the pref was changed, the browser has to be restarted so that the change i
 ## Building the addon
 
 ```
-npm run build
+$ npm run build
 ```
 
 Depending on what should be done with the build, it still needs to be signed by someone else.
