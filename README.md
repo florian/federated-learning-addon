@@ -17,6 +17,10 @@ These updates are collected using Telemetry.
 - `control`: Search works exactly the same way it currently does in Firefox, we only collect additional statistics
 - `control-no-decay`: In the current algorithm, frecency scores are decayed over time. `treatment` loses this effect since scores are recomputed all the time. To see if the decaying is useful and to make a fairer comparison, this variation only removes the decaying effect
 
+After the study was installed, the variation can be changed by updating the `federated-learning.frecency.variation` pref in `about:config`.
+The new value needs to be one of the three values listed above.
+After the pref was changed, the browser has to be restarted so that the change is taken into account.
+
 ## Components
 
 ### Experiment APIs
