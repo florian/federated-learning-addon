@@ -43,10 +43,10 @@ const VARIATION_PREF_NAME = "federated-learning.frecency.variation"
 const { prefs } = browser.experiments
 
 async function setStudyVariation(studyInfo) {
-  if (await prefs.getPrefType(VARIATION_PREF_NAME) === 0) {
+  if (await prefs.getStringPref(VARIATION_PREF_NAME, "") === "") {
     await prefs.setStringPref(VARIATION_PREF_NAME, studyInfo.variation.name)
   } else {
-    const variation = await prefs.getStringPref(VARIATION_PREF_NAME)
+    const variation = await prefs.getStringPref(VARIATION_PREF_NAME, "")
     studyInfo.variation.name = variation
   }
 }

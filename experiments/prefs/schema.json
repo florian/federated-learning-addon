@@ -40,6 +40,10 @@
           {
             "name": "prefName",
             "type": "string"
+          },
+          {
+            "name": "defaultValue",
+            "type": "string"
           }
         ]
       },
