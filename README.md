@@ -2,7 +2,10 @@
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
-This is the first draft of the Firefox addon that implements the client-side part of a federated learning system.
+Federated Learning is a new subarea of machine learning where the training process is distributed among many users.
+Instead of sharing their data, users only have to provide weight updates to the server.
+
+This is the first draft of the Firefox addon that implements the client-side part of a Federated Learning system.
 Everytime users perform searches in the awesome bar, the model's predictions are compared to the actual user behaviour and weight updates are computed.
 These updates are collected using Telemetry.
 
