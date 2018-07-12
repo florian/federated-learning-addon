@@ -15,6 +15,9 @@ const baseStudySetup = {
 
   // endings with urls
   endings: {
+    all: {
+      url: 'https://qsurvey.mozilla.com/s3/ab-fl-survey'
+    }
   },
 
   // Study branches and sample weights, overweighing feature branches

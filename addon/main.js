@@ -9,6 +9,7 @@ async function main () {
   browser.experiments.awesomeBar.onHistorySearch.addListener(optimizer.step.bind(optimizer))
   browser.study.onEndStudy.addListener(() => {
     optimizer.reset()
+    browser.tabs.create(studySetup.endings.all)
     browser.management.uninstallSelf()
   })
 }
