@@ -5,7 +5,8 @@
   },
   "scripts": {
     "test": "standard",
-    "build": "web-ext build --overwrite-dest"
+    "build": "web-ext build --overwrite-dest",
+    "postinstall": "copyStudyUtils experiments"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,14 @@
   },
   "homepage": "https://github.com/florian/federated-learning-addon#readme",
   "standard": {
-    "globals": ["Services", "Cu", "Ci", "PlacesUtils"]
+    "globals": [
+      "Services",
+      "Cu",
+      "Ci",
+      "PlacesUtils"
+    ]
+  },
+  "dependencies": {
+    "shield-studies-addon-utils": "^5.0.2"
   }
 }
