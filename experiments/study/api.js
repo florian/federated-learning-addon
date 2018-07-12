@@ -3748,12 +3748,17 @@ class StudyUtils {
    * @returns {any} the firstRunTimestamp as a number in case the preference is set, or null if the preference is not set
    */
   getFirstRunTimestamp() {
-    const firstRunTimestampPreferenceValue =
-      this._internals.studySetup.testing.firstRunTimestamp ||
-      Services.prefs.getStringPref(
-        this._internals.prefs.firstRunTimestamp,
-        null,
-      );
+    if (
+      typeof this._internals.studySetup.testing.firstRunTimestamp !==
+        "undefined" &&
+      this._internals.studySetup.testing.firstRunTimestamp !== null
+    ) {
+      return Number(this._internals.studySetup.testing.firstRunTimestamp);
+    }
+    const firstRunTimestampPreferenceValue = Services.prefs.getStringPref(
+      this._internals.prefs.firstRunTimestamp,
+      null,
+    );
     return firstRunTimestampPreferenceValue !== null
       ? Number(firstRunTimestampPreferenceValue)
       : null;
@@ -8187,7 +8192,7 @@ module.exports = function(module) {
 /* 64 */
 /***/ (function(module, exports) {
 
-module.exports = {"name":"shield-studies-addon-utils","description":"Utilities for building Shield-Study Mozilla Firefox add-ons.","version":"5.0.2","author":"Mozilla","bin":{"copyStudyUtils":"bin/copyStudyUtils.js"},"bugs":{"url":"https://github.com/mozilla/shield-studies-addon-utils/issues"},"dependencies":{"commander":"^2.15.1","fs-extra":"^6.0.1","shield-study-schemas":"^0.8.3"},"devDependencies":{"ajv":"^6.5.0","assert":"^1.4.1","doctoc":"^1.3.1","eslint":"4.19.1","eslint-plugin-json":"^1.2.0","eslint-plugin-mozilla":"^0.13.0","eslint-plugin-no-unsanitized":"^3.0.2","fixpack":"^2.3.1","fx-runner":"^1.0.7","geckodriver":"^1.11.0","get-firefox":"^2.1.0","mocha":"^5.2.0","npm-run-all":"^4.1.2","pre-commit":"^1.2.2","prettier":"^1.11.0","selenium-webdriver":"^3.6.0","web-ext":"^2.5.0","webpack":"^2.6.1","yamljs":"^0.3.0"},"engines":{"npm":"^6.1.0"},"files":["bin/copyStudyUtils.js","testUtils","webExtensionApis/study/api.js","webExtensionApis/study/schema.json","webExtensionApis/study/src/telemetry.js","weeUtils/documentSchema.js","weeUtils/generateStubApi.js","weeUtils/verifyWeeSchema.js","weeUtils/wee-schema-schema.json"],"homepage":"https://github.com/mozilla/shield-studies-addon-utils#readme","keywords":["addon","jsm","mozilla","normandy","shield","shield-study"],"license":"MPL-2.0","main":"src/index.js","pre-commit":["format"],"repository":{"type":"git","url":"git://github.com/mozilla/shield-studies-addon-utils.git"},"scripts":{"build":"npm run generate && cd webExtensionApis/study && webpack","clean":"rm -rf examples/*/{src/privileged/,dist/}","docformat":"doctoc --title '**Contents**' docs/*.md && prettier '**/*.md' --write","eslint":"eslint . --ext js --ext json","eslint-fix":"npm run eslint -- --fix","fast-build":"npm run-all build:*  # no pre and post checks","format":"prettier '**/*.{css,js,jsm,json,md}' --trailing-comma=all --ignore-path=.eslintignore --write","generate":"npm-run-all -s -n generate:schema:* generate:docs:* generate:stubApi:*","generate:docs:study":"cd webExtensionApis/study && node ../../weeUtils/documentSchema.js schema.json > api.md","generate:schema:study":"cd webExtensionApis/study && yaml2json schema.yaml -p > schema.json && node ../../weeUtils/verifyWeeSchema.js schema.json","generate:stubApi:study":"cd webExtensionApis/study && node ../../weeUtils/generateStubApi.js ./schema.json > stubApi.js","lint":"npm-run-all lint:*","lint:eslint":"npm run eslint","lint:fixpack":"fixpack  # cleans up package.json","postbuild":"if [ -z ${SKIPLINT} ]; then npm run format; fi","postformat":"run-p lint:fixpack eslint-fix","prebuild":"if [ -z ${SKIPLINT} ]; then npm run lint; fi","prepare":"export SKIPLINT=1 && fixpack && npm run build","pretest":"npm run build && npm run test-addon:bundle-utils && npm run test-addon:build","pretest-addon":"npm run pretest","small-study":"cd examples/small-study && npm run rebuild && npm start","test":"npm run test-only","test-addon":"cd test-addon && web-ext run --no-reload","test-addon:build":"cd test-addon && web-ext build","test-addon:bundle-utils":"./bin/copyStudyUtils.js test-addon/src/privileged","test-only":"FIREFOX_BINARY=${FIREFOX_BINARY:-firefox} ADDON_ZIP=test-addon/dist/shield_utils_test_add-on-1.0.0.zip mocha test/functional/ --bail"}}
+module.exports = {"name":"shield-studies-addon-utils","description":"Utilities for building Shield-Study Mozilla Firefox add-ons.","version":"5.0.3","author":"Mozilla","bin":{"copyStudyUtils":"bin/copyStudyUtils.js"},"bugs":{"url":"https://github.com/mozilla/shield-studies-addon-utils/issues"},"dependencies":{"ajv":"^6.5.0","commander":"^2.15.1","fs-extra":"^6.0.1","shield-study-schemas":"^0.8.3"},"devDependencies":{"assert":"^1.4.1","doctoc":"^1.3.1","eslint":"4.19.1","eslint-plugin-json":"^1.2.0","eslint-plugin-mozilla":"^0.13.0","eslint-plugin-no-unsanitized":"^3.0.2","fixpack":"^2.3.1","fx-runner":"^1.0.9","geckodriver":"^1.11.0","get-firefox":"^2.1.0","mocha":"^5.2.0","npm-run-all":"^4.1.2","pre-commit":"^1.2.2","prettier":"^1.11.0","selenium-webdriver":"^3.6.0","web-ext":"^2.7.0","webpack":"^2.6.1","yamljs":"^0.3.0"},"engines":{"npm":"^6.1.0"},"files":["bin/copyStudyUtils.js","testUtils","webExtensionApis/study/api.js","webExtensionApis/study/schema.json","webExtensionApis/study/src/telemetry.js","weeUtils/documentSchema.js","weeUtils/generateStubApi.js","weeUtils/verifyWeeSchema.js","weeUtils/wee-schema-schema.json"],"homepage":"https://github.com/mozilla/shield-studies-addon-utils#readme","keywords":["addon","jsm","mozilla","normandy","shield","shield-study"],"license":"MPL-2.0","main":"src/index.js","pre-commit":["format"],"repository":{"type":"git","url":"git://github.com/mozilla/shield-studies-addon-utils.git"},"scripts":{"build":"npm run generate && cd webExtensionApis/study && webpack","clean":"rm -rf examples/*/{src/privileged/,dist/}","docformat":"doctoc --title '**Contents**' docs/*.md && prettier '**/*.md' --write","eslint":"eslint . --ext js --ext json","eslint-fix":"npm run eslint -- --fix","fast-build":"npm run-all build:*  # no pre and post checks","format":"prettier '**/*.{css,js,jsm,json,md}' --trailing-comma=all --ignore-path=.eslintignore --write","generate":"npm-run-all -s -n generate:schema:* generate:docs:* generate:stubApi:*","generate:docs:study":"cd webExtensionApis/study && node ../../weeUtils/documentSchema.js schema.json > api.md","generate:schema:study":"cd webExtensionApis/study && yaml2json schema.yaml -p > schema.json && node ../../weeUtils/verifyWeeSchema.js schema.json","generate:stubApi:study":"cd webExtensionApis/study && node ../../weeUtils/generateStubApi.js ./schema.json > stubApi.js","lint":"npm-run-all lint:*","lint:eslint":"npm run eslint","lint:fixpack":"fixpack  # cleans up package.json","postbuild":"if [ -z ${SKIPLINT} ]; then npm run format; fi","postformat":"run-p lint:fixpack eslint-fix","prebuild":"if [ -z ${SKIPLINT} ]; then npm run lint; fi","prepare":"export SKIPLINT=1 && fixpack && npm run build","pretest":"npm run build && npm run test-addon:bundle-utils && npm run test-addon:build","pretest-addon":"npm run pretest","small-study":"cd examples/small-study && npm run rebuild && npm start","test":"npm run test-only","test-addon":"cd test-addon && web-ext run --no-reload","test-addon:build":"cd test-addon && web-ext build","test-addon:bundle-utils":"./bin/copyStudyUtils.js test-addon/src/privileged","test-only":"FIREFOX_BINARY=${FIREFOX_BINARY:-nightly} ADDON_ZIP=test-addon/dist/shield_utils_test_add-on-1.0.0.zip mocha test/functional/ --bail"}}
 
 /***/ }),
 /* 65 */
@@ -8221,7 +8226,10 @@ __WEBPACK_IMPORTED_MODULE_0__logger__["a" /* default */].debug("loading web exte
 // eslint-disable-next-line no-undef
 const { EventManager } = ExtensionCommon;
 // eslint-disable-next-line no-undef
-const { EventEmitter, ExtensionError } = ExtensionUtils;
+const { ExtensionError } = ExtensionUtils;
+
+const EventEmitter =
+  ExtensionCommon.EventEmitter || ExtensionUtils.EventEmitter;
 
 /** Event emitter to handle Events defined in the API
  *
