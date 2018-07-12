@@ -68,7 +68,6 @@ class ModelSynchronization {
     }
 
     const windowInfo = await browser.windows.getLastFocused()
-    console.log("info", windowInfo.incognito)
 
     if (!windowInfo.incognito) {
       browser.experiments.telemetry.submitPing(payload)
