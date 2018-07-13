@@ -51,24 +51,6 @@ async function setStudyVariation(studyInfo) {
   }
 }
 
-async function cachingFirstRunShouldAllowEnroll () {
-  // Cached answer.  Used on 2nd run
-  let allowed = await browser.storage.local.get('allowEnroll')
-  if (allowed) return true
-
-  /*
-  First run, we must calculate the answer.
-  If false, the study will endStudy with 'ineligible' during `setup`
-  */
-
-  // could have other reasons to be eligible, such add-ons, prefs
-  allowed = true
-
-  // cache the answer
-  await browser.storage.local.set({ allowEnroll: allowed })
-  return allowed
-}
-
 /**
  * Augment declarative studySetup with any necessary async values
  *
@@ -84,13 +66,6 @@ async function getStudySetup () {
 
   // shallow copy
   const studySetup = Object.assign({}, baseStudySetup)
-
-  studySetup.allowEnroll = await cachingFirstRunShouldAllowEnroll()
-  studySetup.testing = {
-    /* Example: override testing keys various ways, such as by prefs. (TODO) */
-    variationName: null, // await browser.prefs.getStringPref(prefs.variationName);
-    firstRunTimestamp: null,
-    expired: null
-  }
+  studySetup.allowEnroll = true
   return studySetup
 }
