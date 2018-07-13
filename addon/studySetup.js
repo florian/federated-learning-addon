@@ -31,7 +31,12 @@ const baseStudySetup = {
       name: 'control-no-decay',
       weight: 1 / 3
     }
-  ]
+  ],
+
+  // maximum time that the study should run, from the first run
+  expire: {
+    days: 14
+  }
 }
 
 const VARIATION_PREF_NAME = "federated-learning.frecency.variation"
