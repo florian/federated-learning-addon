@@ -1,6 +1,7 @@
 'use strict'
 
 ChromeUtils.import('resource://gre/modules/PlacesUtils.jsm')
+ChromeUtils.import('resource://gre/modules/Services.jsm')
 
 const CHUNK_SIZE = 1000
 
@@ -24,7 +25,69 @@ async function getMozPlacesCount () {
   return res[0].getResultByName('count')
 }
 
+const FRECENCY_PREFS = [
+  'places.frecency.firstBucketCutoff',
+  'places.frecency.secondBucketCutoff',
+  'places.frecency.thirdBucketCutoff',
+  'places.frecency.fourthBucketCutoff',
+  'places.frecency.firstBucketWeight',
+  'places.frecency.secondBucketWeight',
+  'places.frecency.thirdBucketWeight',
+  'places.frecency.fourthBucketWeight',
+  'places.frecency.defaultBucketWeight',
+  'places.frecency.embedVisitBonus',
+  'places.frecency.framedLinkVisitBonus',
+  'places.frecency.linkVisitBonus',
+  'places.frecency.typedVisitBonus',
+  'places.frecency.bookmarkVisitBonus',
+  'places.frecency.downloadVisitBonus',
+  'places.frecency.permRedirectVisitBonus',
+  'places.frecency.tempRedirectVisitBonus',
+  'places.frecency.redirectSourceVisitBonus',
+  'places.frecency.defaultVisitBonus',
+  'places.frecency.unvisitedBookmarkBonus',
+  'places.frecency.unvisitedTypedBonus',
+  'places.frecency.reloadVisitBonus'
+]
+
+const FRECENCY_DEFAULT_PREF_VALUES = [
+  4,
+  14,
+  31,
+  90,
+  100,
+  70,
+  50,
+  30,
+  10,
+  0,
+  0,
+  100,
+  2000,
+  75,
+  0,
+  0,
+  0,
+  25,
+  0,
+  140,
+  200,
+  0
+]
+
 var frecency = class extends ExtensionAPI {
+  async onShutdown (shutdownReason) {
+    console.log(shutdownReason, "reason")
+    if (
+         shutdownReason === "ADDON_UNINSTALL" ||
+           shutdownReason === "ADDON_DISABLE"
+    ) {
+      for (let i = 0; i < PREFS.length; i++) {
+        Services.prefs.setIntPref(FRECENCY_PREFS[i], FRECENCY_DEFAULT_PREF_VALUES[i])
+      }
+    }
+  }
+
   getAPI () {
     return {
       experiments: {
