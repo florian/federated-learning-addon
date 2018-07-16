@@ -24,7 +24,50 @@ async function getMozPlacesCount () {
   return res[0].getResultByName('count')
 }
 
+
+const PREFS = [
+  'places.frecency.firstBucketCutoff',
+  'places.frecency.secondBucketCutoff',
+  'places.frecency.thirdBucketCutoff',
+  'places.frecency.fourthBucketCutoff',
+  'places.frecency.firstBucketWeight',
+  'places.frecency.secondBucketWeight',
+  'places.frecency.thirdBucketWeight',
+  'places.frecency.fourthBucketWeight',
+  'places.frecency.defaultBucketWeight',
+  'places.frecency.embedVisitBonus',
+  'places.frecency.framedLinkVisitBonus',
+  'places.frecency.linkVisitBonus',
+  'places.frecency.typedVisitBonus',
+  'places.frecency.bookmarkVisitBonus',
+  'places.frecency.downloadVisitBonus',
+  'places.frecency.permRedirectVisitBonus',
+  'places.frecency.tempRedirectVisitBonus',
+  'places.frecency.redirectSourceVisitBonus',
+  'places.frecency.defaultVisitBonus',
+  'places.frecency.unvisitedBookmarkBonus',
+  'places.frecency.unvisitedTypedBonus',
+  'places.frecency.reloadVisitBonus'
+];
+
+ChromeUtils.import('resource://gre/modules/Services.jsm');
+
+
+function cleanupPrefs () {
+  for (let i = 0; i < PREFS.length; i++) {
+    Services.prefs.clearUserPref(PREFS[i]);
+  }
+}
+
 var frecency = class extends ExtensionAPI {
+  async onShutdown (shutdownReason) {
+    if (
+      shutdownReason === "ADDON_UNINSTALL" ||
+      shutdownReason === "ADDON_DISABLE"
+    ) {
+      cleanupPrefs();
+    }
+  }
   getAPI () {
     return {
       experiments: {
