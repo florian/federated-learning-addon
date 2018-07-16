@@ -22,28 +22,3 @@ const PREFS = [
   'places.frecency.unvisitedTypedBonus',
   'places.frecency.reloadVisitBonus'
 ]
-
-const DEFAULT_PREF_VALUES = [
-  4,
-  14,
-  31,
-  90,
-  100,
-  70,
-  50,
-  30,
-  10,
-  0,
-  0,
-  100,
-  2000,
-  75,
-  0,
-  0,
-  0,
-  25,
-  0,
-  140,
-  200,
-  0
-]

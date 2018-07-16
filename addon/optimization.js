@@ -50,10 +50,4 @@ class FrecencyOptimizer {
 
     return gradient
   }
-
-  reset () {
-    for (let i = 0; i < PREFS.length; i++) {
-      browser.experiments.prefs.setIntPref(PREFS[i], DEFAULT_PREF_VALUES[i])
-    }
-  }
 }
