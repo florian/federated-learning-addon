@@ -1,4 +1,4 @@
-const URL_ENDPOINT = 'https://s3-us-west-2.amazonaws.com/telemetry-test-bucket/frecency/latest.json'
+const URL_ENDPOINT = 'https://public-data.telemetry.mozilla.org/awesomebar_study/latest.json'
 const MINUTES_PER_ITERATION = 30 // Should be a dividor of 60
 const TREATMENT_GROUP = 'treatment'
 const CONTROL_GROUP = 'control'

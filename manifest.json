@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Federated Learning Awesome Bar",
   "description": "Improve history and bookmark search",
-  "version": "1.0.0",
+  "version": "1.0.2",
 
   "applications": {
     "gecko": {

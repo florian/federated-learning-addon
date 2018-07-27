@@ -21,15 +21,15 @@ const baseStudySetup = {
   weightedVariations: [
     {
       name: 'treatment',
-      weight: 1 / 3
+      weight: 0.6
     },
     {
       name: 'control',
-      weight: 1 / 3
+      weight: 0.2
     },
     {
       name: 'control-no-decay',
-      weight: 1 / 3
+      weight: 0.2
     }
   ],
 

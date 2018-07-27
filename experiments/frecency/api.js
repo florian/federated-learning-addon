@@ -14,7 +14,7 @@ async function restoreFrecencyTrigger () {
   // Query from https://dxr.mozilla.org/mozilla-central/source/toolkit/components/places/nsPlacesTriggers.h#176
   return await PlacesUtils.withConnectionWrapper("federated-learning", async db => {
     db.execute(`
-CREATE TEMP TRIGGER moz_places_afterupdate_frecency_trigger AFTER UPDATE OF frecency ON moz_places FOR EACH ROW WHEN NEW.frecency >= 0 AND NOT is_frecency_decaying() BEGIN UPDATE moz_origins SET frecency = ( SELECT IFNULL(MAX(frecency), 0) FROM moz_places WHERE moz_places.origin_id = moz_origins.id  ) WHERE id = NEW.origin_id; INSERT OR REPLACE INTO moz_meta(key, value) VALUES ( 'frecency_count', CAST(IFNULL((SELECT value FROM moz_meta WHERE key = 'frecency_count'), 0) AS INTEGER) - (CASE WHEN OLD.frecency <= 0 OR OLD.id < 0 THEN 0 ELSE 1 END) + (CASE WHEN NEW.frecency <= 0 OR NEW.id < 0 THEN 0 ELSE 1 END)  ), ( 'frecency_sum', CAST(IFNULL((SELECT value FROM moz_meta WHERE key = 'frecency_sum'), 0) AS INTEGER) - (CASE WHEN OLD.frecency <= 0 OR OLD.id < 0 THEN 0 ELSE OLD.frecency END) + (CASE WHEN NEW.frecency <= 0 OR NEW.id < 0 THEN 0 ELSE NEW.frecency END)  ), ( 'frecency_sum_of_squares', CAST(IFNULL((SELECT value FROM moz_meta WHERE key = 'frecency_sum_of_squares'), 0) AS INTEGER) - (CASE WHEN OLD.frecency <= 0 OR OLD.id < 0 THEN 0 ELSE OLD.frecency * OLD.frecency END) + (CASE WHEN NEW.frecency <= 0 OR NEW.id < 0 THEN 0 ELSE NEW.frecency * NEW.frecency END)  ); END
+CREATE TEMP TRIGGER moz_places_afterupdate_frecency_trigger AFTER UPDATE OF frecency ON moz_places FOR EACH ROW WHEN NOT is_frecency_decaying() BEGIN INSERT INTO moz_updateoriginsupdate_temp (prefix, host, frecency_delta) VALUES (get_prefix(NEW.url), get_host_and_port(NEW.url), MAX(NEW.frecency, 0) - MAX(OLD.frecency, 0)) ON CONFLICT(prefix, host) DO UPDATE SET frecency_delta = frecency_delta + EXCLUDED.frecency_delta; END
     `)
   })
 }
@@ -52,7 +52,6 @@ const PREFS = [
 
 ChromeUtils.import('resource://gre/modules/Services.jsm');
 
-
 function cleanupPrefs () {
   for (let i = 0; i < PREFS.length; i++) {
     Services.prefs.clearUserPref(PREFS[i]);
@@ -65,9 +64,10 @@ var frecency = class extends ExtensionAPI {
       shutdownReason === "ADDON_UNINSTALL" ||
       shutdownReason === "ADDON_DISABLE"
     ) {
-      cleanupPrefs();
+      cleanupPrefs()
     }
   }
+
   getAPI () {
     return {
       experiments: {
